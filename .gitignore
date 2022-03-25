@@ -1,0 +1,9 @@
+# any temporary notes
+*.draft.*
+*.notes.*
+
+# obsidian setttings
+.obsidian/**/*
+.obsidian/appearance.json
+.obsidian/hotkeys.json
+.obsidian/workspace

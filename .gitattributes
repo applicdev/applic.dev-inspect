@@ -1,0 +1,7 @@
+*	text=auto eol=lf 
+
+# linguist overrides 
+*.md -linguist-vendored
+*.md -linguist-generated
+*.md -linguist-documentation
+*.md linguist-detectable
