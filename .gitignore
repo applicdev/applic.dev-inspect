@@ -1,9 +1,7 @@
-# any temporary notes
-*.draft.*
-*.notes.*
+.DS_Store
 
-# obsidian setttings
-.obsidian/**/*
-.obsidian/appearance.json
-.obsidian/hotkeys.json
-.obsidian/workspace
+*.draft*
+*.notes*
+
+gh-pages
+gh-production
