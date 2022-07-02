@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: denolib/setup-deno@v2
 
-      - run: deno run -A --unstable packages/page-tools/bundle.ts
+      - run: deno run -A --unstable packages/dev-inspect-tools/bundle.ts
 
       - uses: peaceiris/actions-gh-pages@v3
         with:
