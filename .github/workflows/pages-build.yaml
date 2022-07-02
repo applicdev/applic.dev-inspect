@@ -16,15 +16,15 @@ jobs:
       - uses: denolib/setup-deno@v2
 
       - run: deno run -A --unstable packages/pwa-tools/bundle.ts
+
       - uses: peaceiris/actions-gh-pages@v3
         with:
           publish_branch: gh-production
-          publish_dir: ./docs/.publish/gh-production
+          publish_dir: ./docs/.pagelet/gh-production
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: deno run -A --unstable packages/pwa-tools/bundle.ts --gh-pages
       - uses: peaceiris/actions-gh-pages@v3
         with:
           publish_branch: gh-pages
-          publish_dir: ./docs/.publish/gh-pages
+          publish_dir: ./docs/.pagelet/gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}

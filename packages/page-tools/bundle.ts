@@ -1,11 +1,11 @@
 import { emptyDir } from 'https://deno.land/std@0.78.0/fs/mod.ts';
 
 {
-  const out = './docs/.typelet/gh-pages';
+  const out = './docs/.pagelet/gh-pages';
   await emptyDir(`${out}`);
 }
 
 {
-  const out = './docs/.typelet/gh-production';
+  const out = './docs/.pagelet/gh-production';
   await emptyDir(`${out}`);
 }
