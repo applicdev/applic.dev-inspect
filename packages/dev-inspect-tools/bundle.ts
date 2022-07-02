@@ -15,9 +15,13 @@ async function requestBundle({ inp, out }: { inp: { urn: string }; out: { urn: s
     },
   };
 
-  const bundle = await rollup(options);
-  await bundle.write(options.output);
-  await bundle.close();
+  try {
+    const bundle = await rollup(options);
+    await bundle.write(options.output);
+    await bundle.close();
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function requestModule({ out }: { out: { urn: string } }): Promise<void> {
