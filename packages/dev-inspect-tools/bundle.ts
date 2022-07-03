@@ -10,8 +10,8 @@ async function requestBundle({ inp, out }: { inp: { urn: string }; out: { urn: s
     input: inp.urn,
     output: {
       file: out.urn,
-      format: 'es' as const,
-      sourcemap: true,
+      // format: 'es' as const,
+      // sourcemap: true,
     },
   };
 
@@ -21,7 +21,7 @@ async function requestBundle({ inp, out }: { inp: { urn: string }; out: { urn: s
       await bundle.close();
     })
     .catch((err: Error) => {
-      console.error(err.toString());
+      console.error(err);
     });
 }
 
