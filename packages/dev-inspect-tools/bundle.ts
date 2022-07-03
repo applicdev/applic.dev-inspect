@@ -20,8 +20,8 @@ async function requestBundle({ inp, out }: { inp: { urn: string }; out: { urn: s
       await bundle.write(options.output);
       await bundle.close();
     })
-    .catch((err) => {
-      console.error(err);
+    .catch((err: Error) => {
+      console.error(err.toString());
     });
 }
 
