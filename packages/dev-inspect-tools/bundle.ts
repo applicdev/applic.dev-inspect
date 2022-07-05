@@ -1,28 +1,19 @@
 import { copy, emptyDir } from 'https://deno.land/std@0.78.0/fs/mod.ts';
-import { rollup } from 'https://deno.land/x/drollup@2.58.0+0.20.0/mod.ts';
-
-// function render({ tem, out }: { tem: string; out: string }, option: { [key: string]: any }) {
-//   // ...
-// }
+import { rollup } from 'https://deno.land/x/drollup/mod.ts';
 
 async function requestBundle({ inp, out }: { inp: { urn: string }; out: { urn: string } }): Promise<void> {
   const options = {
     input: inp.urn,
     output: {
       file: out.urn,
-      // format: 'es' as const,
-      // sourcemap: true,
+      format: 'es' as const,
+      sourcemap: true,
     },
   };
 
-  await rollup(options)
-    .then(async (bundle) => {
-      await bundle.write(options.output);
-      await bundle.close();
-    })
-    .catch((err: Error) => {
-      console.error(err);
-    });
+  const bundle = await rollup(options);
+  await bundle.write(options.output);
+  await bundle.close();
 }
 
 async function requestModule({ out }: { out: { urn: string } }): Promise<void> {
