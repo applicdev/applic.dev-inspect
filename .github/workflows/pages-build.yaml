@@ -14,6 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: denolib/setup-deno@v2
+        with:
+          deno-version: v1.20.1
 
       - run: deno run -A --unstable packages/dev-inspect-tools/bundle.ts
 
