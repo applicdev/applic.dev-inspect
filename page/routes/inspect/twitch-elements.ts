@@ -1,6 +1,6 @@
 import { resolve } from 'https://deno.land/std@0.149.0/path/mod.ts';
 
-const STATIC_INSPECT_PATH = resolve(Deno.cwd(), `./static/inspect/twitch-elements/index.html`);
+const STATIC_INSPECT_PATH = resolve(import.meta.url.replace('file:///', ''), `../../../static/inspect/twitch-elements/index.html`);
 const STATIC_INSPECT = await Deno.readTextFile(STATIC_INSPECT_PATH);
 
 export const handler = () => {
