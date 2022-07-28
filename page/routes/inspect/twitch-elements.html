@@ -41,15 +41,7 @@
     <!---->
 
     <!---->
-    <script defer>
-      (async () => {
-        if (!('serviceWorker' in navigator)) return;
-
-        const reg = await navigator.serviceWorker
-          .register('./sw.js', { scope: '/inspect/twitch-elements/' })
-          .catch((err) => console.log);
-      })();
-    </script>
+    <script defer src="/inspect/page.sw-register.js">  </script>
     <!---->
 
     <script>
