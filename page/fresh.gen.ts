@@ -3,12 +3,16 @@
 // This file is automatically updated during development when running `dev.ts`.
 
 import * as $0 from "./routes/_404.ts";
-import * as $1 from "./routes/inspect/twitch-elements.ts";
+import * as $1 from "./routes/inspect/page.webmanifest.ts";
+import * as $2 from "./routes/inspect/twitch-elements-legacy.ts";
+import * as $3 from "./routes/inspect/twitch-elements.tsx";
 
 const manifest = {
   routes: {
     "./routes/_404.ts": $0,
-    "./routes/inspect/twitch-elements.ts": $1,
+    "./routes/inspect/page.webmanifest.ts": $1,
+    "./routes/inspect/twitch-elements-legacy.ts": $2,
+    "./routes/inspect/twitch-elements.tsx": $3,
   },
   islands: {},
   baseUrl: import.meta.url,
