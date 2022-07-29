@@ -1,3 +1,3 @@
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./page.sw.js');
+  navigator.serviceWorker.register('/inspect/page.sw.js', { scope: '/inspect/' });
 }

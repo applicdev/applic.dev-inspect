@@ -1,5 +1,5 @@
 {
-  "deno.enable": true,
+  "deno.enablePaths": ["./page"],
   "deno.lint": true,
   "deno.importMap": "./page/import_map.json",
 }

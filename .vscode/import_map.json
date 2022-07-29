@@ -1,5 +1,7 @@
 {
   "imports": {
+    "#0": "-- Fresh --",
+
     "$fresh/": "https://deno.land/x/fresh@1.0.1/",
     "$semver/": "https://deno.land/x/semver@v1.4.0/",
 
@@ -9,6 +11,20 @@
 
     "preact": "https://esm.sh/preact@10.8.2",
     "preact/": "https://esm.sh/preact@10.8.2/",
-    "preact-render-to-string": "https://esm.sh/preact-render-to-string@5.2.0?external=preact"
+    "preact-render-to-string": "https://esm.sh/preact-render-to-string@5.2.0?external=preact",
+
+    "#1": "-- Lit --",
+
+    "lit": "https://unpkg.com/lit",
+    "lit/": "https://unpkg.com/lit/",
+
+    "lit-html": "https://unpkg.com/lit-html",
+    "lit-html/": "https://unpkg.com/lit-html/",
+
+    "lit-element": "https://unpkg.com/lit-element",
+    "lit-element/": "https://unpkg.com/lit-element/",
+
+    "@lit/reactive-element": "https://unpkg.com/@lit/reactive-element",
+    "@lit/reactive-element/": "https://unpkg.com/@lit/reactive-element/"
   }
 }
