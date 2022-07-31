@@ -3,11 +3,11 @@
     "lit": "https://unpkg.com/lit",
     "lit/": "https://unpkg.com/lit/",
 
-    "lit-html": "https://unpkg.com/lit-html", 
-    "lit-html/": "https://unpkg.com/lit-html/", 
+    "lit-html": "https://unpkg.com/lit-html",
+    "lit-html/": "https://unpkg.com/lit-html/",
 
-    "lit-element": "https://unpkg.com/lit-element", 
-    "lit-element/": "https://unpkg.com/lit-element/", 
+    "lit-element": "https://unpkg.com/lit-element",
+    "lit-element/": "https://unpkg.com/lit-element/",
 
     "@lit/reactive-element": "https://unpkg.com/@lit/reactive-element",
     "@lit/reactive-element/": "https://unpkg.com/@lit/reactive-element/"

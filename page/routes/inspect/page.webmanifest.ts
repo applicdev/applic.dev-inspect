@@ -4,6 +4,7 @@ import { PAGE, PageList } from '../../data/page.ts';
 
 const DATA = {
   name: PAGE['_app'].name,
+  description: PAGE['_app'].og.description,
   short_name: PAGE['_app'].short_name,
   start_url: PAGE['_app'].og.url,
   display: 'standalone',
@@ -16,6 +17,7 @@ const DATA = {
     { src: '/inspect/assets/figure/512w/page-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
   ],
 
+  orientation: 'any',
   capture_links: 'existing-client-navigate',
   launch_handler: { route_to: 'existing-client-navigate' },
 };
