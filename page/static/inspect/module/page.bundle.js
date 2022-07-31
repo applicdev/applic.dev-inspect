@@ -589,6 +589,8 @@ let PageBounds = class PageBounds extends s3 {
         display: flex;
         flex: none;
         flex-direction: column;
+
+        background: #f6f6f7;
       }
 
       .node.bounds-warp {
@@ -629,10 +631,39 @@ let InspectApp = class InspectApp extends s3 {
         flex: 1;
         flex-direction: column;
       }
+
+      .node.app-navigation {
+      }
     `, 
     ];
     render() {
-        return $` <div class=""></div> `;
+        return $`
+      <!---->
+      <div class="node bounds-warp">
+        <!---->
+        <div>
+          <inspect-app-directories></inspect-app-directories>
+        </div>
+        <!---->
+
+        <!---->
+        <div>
+          <inspect-app-viewing></inspect-app-viewing>
+        </div>
+        <!---->
+      </div>
+      <!---->
+
+      <!---->
+      <div class="node app-navigation">
+        <span>Hello!</span>
+      </div>
+      <!---->
+    `;
+    }
+    connectedCallback() {
+        super.connectedCallback();
+        globalThis.document.title = `Inspect - Twitch Elements`;
     }
 };
 InspectApp = __decorate1([

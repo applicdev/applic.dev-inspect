@@ -26,7 +26,9 @@ const Seo = ({ ...customMeta }) => {
   return (
     <Head>
       <meta content='index, follow' name='robots' />
-      <meta content='width=device-width, initial-scale=1, user-scalable=no' name='viewport' />
+      {/* FIXME: fresh also adds a viewport meta node
+      <meta content='width=device-width, initial-scale=1, user-scalable=no' name='viewport' /> 
+      */}
 
       {/*  */}
       <title>{meta.name}</title>
