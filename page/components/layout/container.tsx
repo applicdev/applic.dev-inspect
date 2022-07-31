@@ -2,12 +2,10 @@
 /** @jsxFrag Fragment */
 import { ComponentChildren, Fragment, h } from 'preact';
 import { Head } from '$fresh/runtime.ts';
+import { PAGE, Page } from '../../data/page.ts';
 
 export type Props = {
   children: ComponentChildren;
-  title?: string;
-  name?: string;
-  description?: string;
 };
 
 export const Container = ({ children, ...customMeta }: Props) => {
@@ -21,8 +19,7 @@ export const Container = ({ children, ...customMeta }: Props) => {
 
 const Seo = ({ ...customMeta }) => {
   const meta = {
-    title: 'Untitled',
-    description: '',
+    ...PAGE['_app'],
     ...customMeta,
   };
 
@@ -32,9 +29,8 @@ const Seo = ({ ...customMeta }) => {
       <meta content='width=device-width, initial-scale=1, user-scalable=no' name='viewport' />
 
       {/*  */}
-      <title>{meta.title}</title>
-      <meta content={meta.description} name='description' />
-      {/* <meta content='null' name='keywords' /> */}
+      <title>{meta.name}</title>
+      <meta content={meta.og.description} name='description' />
       {/*  */}
 
       {/*  */}
@@ -50,17 +46,12 @@ const Seo = ({ ...customMeta }) => {
       {/*  */}
 
       {/*  */}
-      <meta content='en-NL' property='og:locale' />
-      <meta content='/inspect/assets/banner/1200w/page.png' property='og:image' />
-      <meta content={meta.title} property='og:title' />
-      <meta content='/inspect/' property='og:url' />
-      <meta content={meta.description} property='og:description' />
+      <meta content={meta.og.locale} property='og:locale' />
+      <meta content={meta.og.image} property='og:image' />
+      <meta content={meta.og.title} property='og:title' />
+      <meta content={meta.og.url} property='og:url' />
+      <meta content={meta.og.description} property='og:description' />
       <meta content='summary_large_image' property='twitter:card' />
-      {/*  */}
-
-      {/*  */}
-      <link rel='stylesheet' href='./assets/stylesheets/fonts/BreezeSans.css' />
-      <link rel='stylesheet' href='./assets/stylesheets/pattern.css' />
       {/*  */}
     </Head>
   );

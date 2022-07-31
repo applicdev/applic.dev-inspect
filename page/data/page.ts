@@ -2,7 +2,7 @@ export type PageList = Record<string, Page>;
 export type Page = {
   name: string;
   short_name: string;
-  description: '';
+  description: string;
   og: {
     locale: string; //
     title: string;
@@ -15,15 +15,14 @@ export type Page = {
 export const PAGE = (() => {
   const list: PageList = {};
   const page: Page = {
-    name: 'Milo',
-    short_name: 'Milo',
-    description: '',
+    name: 'Inspect',
+    short_name: 'Inspect',
     og: {
       locale: 'en-NL',
-      title: 'Milo',
+      title: 'Inspect',
       image: '/assets/banner/1200w/page.png',
-      description: '',
-      url: '/',
+      description: 'A interactive viewer to test, compare, and export graphics.',
+      url: '/inspect/',
     },
   };
 

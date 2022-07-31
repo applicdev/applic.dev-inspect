@@ -21,7 +21,14 @@ class s {
         return this.cssText;
     }
 }
-const o = (t)=>new s("string" == typeof t ? t : t + "", void 0, e), i = (e, n)=>{
+const o = (t)=>new s("string" == typeof t ? t : t + "", void 0, e), r = (t, ...n)=>{
+    const o = 1 === t.length ? t[0] : n.reduce((e, n, s)=>e + ((t)=>{
+            if (!0 === t._$cssResult$) return t.cssText;
+            if ("number" == typeof t) return t;
+            throw Error("Value passed to 'css' function must be a 'css' function result: " + t + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
+        })(n) + t[s + 1], t[0]);
+    return new s(o, t, e);
+}, i = (e, n)=>{
     t ? e.adoptedStyleSheets = n.map((t)=>t instanceof CSSStyleSheet ? t : t.styleSheet) : n.forEach((t)=>{
         const n = document.createElement("style"), s = window.litNonce;
         void 0 !== s && n.setAttribute("nonce", s), n.textContent = t.cssText, e.appendChild(n);
@@ -32,11 +39,11 @@ const o = (t)=>new s("string" == typeof t ? t : t + "", void 0, e), i = (e, n)=>
         return o(e);
     })(t) : t;
 var s1;
-const e1 = window.trustedTypes, r = e1 ? e1.emptyScript : "", h = window.reactiveElementPolyfillSupport, o1 = {
+const e1 = window.trustedTypes, r1 = e1 ? e1.emptyScript : "", h = window.reactiveElementPolyfillSupport, o1 = {
     toAttribute (t, i) {
         switch(i){
             case Boolean:
-                t = t ? r : null;
+                t = t ? r1 : null;
                 break;
             case Object:
             case Array:
@@ -256,7 +263,7 @@ a.finalized = !0, a.elementProperties = new Map, a.elementStyles = [], a.shadowR
 var t1;
 const i1 = globalThis.trustedTypes, s2 = i1 ? i1.createPolicy("lit-html", {
     createHTML: (t)=>t
-}) : void 0, e2 = `lit$${(Math.random() + "").slice(9)}$`, o2 = "?" + e2, n2 = `<${o2}>`, l1 = document, h1 = (t = "")=>l1.createComment(t), r1 = (t)=>null === t || "object" != typeof t && "function" != typeof t, d = Array.isArray, u = (t)=>d(t) || "function" == typeof (null == t ? void 0 : t[Symbol.iterator]), c = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, v = /-->/g, a1 = />/g, f = RegExp(">|[ \t\n\f\r](?:([^\\s\"'>=/]+)([ \t\n\f\r]*=[ \t\n\f\r]*(?:[^ \t\n\f\r\"'`<>=]|(\"|')|))|$)", "g"), _ = /'/g, g = /"/g, m = /^(?:script|style|textarea|title)$/i, p = (t)=>(i, ...s)=>({
+}) : void 0, e2 = `lit$${(Math.random() + "").slice(9)}$`, o2 = "?" + e2, n2 = `<${o2}>`, l1 = document, h1 = (t = "")=>l1.createComment(t), r2 = (t)=>null === t || "object" != typeof t && "function" != typeof t, d = Array.isArray, u = (t)=>d(t) || "function" == typeof (null == t ? void 0 : t[Symbol.iterator]), c = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, v = /-->/g, a1 = />/g, f = RegExp(">|[ \t\n\f\r](?:([^\\s\"'>=/]+)([ \t\n\f\r]*=[ \t\n\f\r]*(?:[^ \t\n\f\r\"'`<>=]|(\"|')|))|$)", "g"), _ = /'/g, g = /"/g, m = /^(?:script|style|textarea|title)$/i, p = (t)=>(i, ...s)=>({
             _$litType$: t,
             strings: i,
             values: s
@@ -352,7 +359,7 @@ function P(t, i, s = t, e) {
     var o, n, l, h;
     if (i === b) return i;
     let d = void 0 !== e ? null === (o = s._$Cl) || void 0 === o ? void 0 : o[e] : s._$Cu;
-    const u = r1(i) ? void 0 : i._$litDirective$;
+    const u = r2(i) ? void 0 : i._$litDirective$;
     return (null == d ? void 0 : d.constructor) !== u && (null === (n = null == d ? void 0 : d._$AO) || void 0 === n || n.call(d, !1), void 0 === u ? d = void 0 : (d = new u(t), d._$AT(t, s, e)), void 0 !== e ? (null !== (l = (h = s)._$Cl) && void 0 !== l ? l : h._$Cl = [])[e] = d : s._$Cu = d), void 0 !== d && (i = P(t, d._$AS(t, i.values), d, e)), i;
 }
 class V {
@@ -405,7 +412,7 @@ class N {
         return this._$AB;
     }
     _$AI(t, i = this) {
-        t = P(this, t, i), r1(t) ? t === w || null == t || "" === t ? (this._$AH !== w && this._$AR(), this._$AH = w) : t !== this._$AH && t !== b && this.T(t) : void 0 !== t._$litType$ ? this.$(t) : void 0 !== t.nodeType ? this.k(t) : u(t) ? this.S(t) : this.T(t);
+        t = P(this, t, i), r2(t) ? t === w || null == t || "" === t ? (this._$AH !== w && this._$AR(), this._$AH = w) : t !== this._$AH && t !== b && this.T(t) : void 0 !== t._$litType$ ? this.$(t) : void 0 !== t.nodeType ? this.k(t) : u(t) ? this.S(t) : this.T(t);
     }
     j(t, i = this._$AB) {
         return this._$AA.parentNode.insertBefore(t, i);
@@ -414,7 +421,7 @@ class N {
         this._$AH !== t && (this._$AR(), this._$AH = this.j(t));
     }
     T(t) {
-        this._$AH !== w && r1(this._$AH) ? this._$AA.nextSibling.data = t : this.k(l1.createTextNode(t)), this._$AH = t;
+        this._$AH !== w && r2(this._$AH) ? this._$AA.nextSibling.data = t : this.k(l1.createTextNode(t)), this._$AH = t;
     }
     $(t) {
         var i;
@@ -461,11 +468,11 @@ class S1 {
     _$AI(t, i = this, s, e) {
         const o = this.strings;
         let n = !1;
-        if (void 0 === o) t = P(this, t, i, 0), n = !r1(t) || t !== this._$AH && t !== b, n && (this._$AH = t);
+        if (void 0 === o) t = P(this, t, i, 0), n = !r2(t) || t !== this._$AH && t !== b, n && (this._$AH = t);
         else {
             const e1 = t;
             let l, h;
-            for(t = o[0], l = 0; l < o.length - 1; l++)h = P(this, e1[s + l], i, l), h === b && (h = this._$AH[l]), n || (n = !r1(h) || h !== this._$AH[l]), h === w ? t = w : t !== w && (t += (null != h ? h : "") + o[l + 1]), this._$AH[l] = h;
+            for(t = o[0], l = 0; l < o.length - 1; l++)h = P(this, e1[s + l], i, l), h === b && (h = this._$AH[l]), n || (n = !r2(h) || h !== this._$AH[l]), h === w ? t = w : t !== w && (t += (null != h ? h : "") + o[l + 1]), this._$AH[l] = h;
         }
         n && !e && this.P(t);
     }
@@ -564,29 +571,6 @@ const n4 = (n)=>(e)=>"function" == typeof e ? ((n, e)=>(window.customElements.de
                 }
             };
         })(n, e);
-const i2 = (i, e)=>"method" === e.kind && e.descriptor && !("value" in e.descriptor) ? {
-        ...e,
-        finisher (n) {
-            n.createProperty(e.key, i);
-        }
-    } : {
-        kind: "field",
-        key: Symbol(),
-        placement: "own",
-        descriptor: {},
-        originalKey: e.key,
-        initializer () {
-            "function" == typeof e.initializer && (this[e.key] = e.initializer.call(this));
-        },
-        finisher (n) {
-            n.createProperty(e.key, i);
-        }
-    };
-function e3(e) {
-    return (n, t)=>void 0 !== t ? ((i, e, n)=>{
-            e.constructor.createProperty(n, i);
-        })(e, n, t) : i2(e, n);
-}
 var n5;
 null != (null === (n5 = window.HTMLSlotElement) || void 0 === n5 ? void 0 : n5.prototype.assignedElements) ? (o, n)=>o.assignedElements(n) : (o, n)=>o.assignedNodes(n).filter((o)=>o.nodeType === Node.ELEMENT_NODE);
 var __decorate = this && this.__decorate || function(decorators, target, key, desc) {
@@ -595,19 +579,63 @@ var __decorate = this && this.__decorate || function(decorators, target, key, de
     else for(var i = decorators.length - 1; i >= 0; i--)if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-let MyElement = class MyElement extends s3 {
-    version = 'STARTING';
+let PageBounds = class PageBounds extends s3 {
+    static styles = [
+        r`
+      :host {
+        position: absolute;
+        inset: 0rem 0rem;
+
+        display: flex;
+        flex: none;
+        flex-direction: column;
+      }
+
+      .node.bounds-warp {
+        position: relative;
+
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+      }
+    `, 
+    ];
     render() {
         return $`
-      <p>Welcome to the Lit tutorial!</p>
-      <p>This is the ${this.version} code.</p>
+      <div class="node bounds-warp">
+        <!---->
+        <slot></slot>
+        <!---->
+      </div>
     `;
     }
 };
-__decorate([
-    e3()
-], MyElement.prototype, "version", void 0);
-MyElement = __decorate([
-    n4('my-element')
-], MyElement);
+PageBounds = __decorate([
+    n4('page-bounds')
+], PageBounds);
+var __decorate1 = this && this.__decorate || function(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for(var i = decorators.length - 1; i >= 0; i--)if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+let InspectApp = class InspectApp extends s3 {
+    static styles = [
+        r`
+      :host {
+        position: relative;
+
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+      }
+    `, 
+    ];
+    render() {
+        return $` <div class=""></div> `;
+    }
+};
+InspectApp = __decorate1([
+    n4('inspect-app')
+], InspectApp);
 
