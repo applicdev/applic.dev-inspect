@@ -3,6 +3,7 @@
 *.css -linguist-detectable
 *.html -linguist-detectable
 *.json -linguist-detectable
+*.js -linguist-detectable
 
 *.md -linguist-vendored
 *.md -linguist-generated
