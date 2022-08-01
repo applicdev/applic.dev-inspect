@@ -11,10 +11,11 @@ export function InspectAppPages() {
 
     .node.app-pages > .pages-inner {
       display: flex;
-      /* flex: 1; */
+      flex: 1;
       flex-direction: column;
 
-      width: var(--page-wid, unset);
+      min-width: var(--page-wid, unset);
+      max-width: var(--page-wid, unset);
 
       overflow: hidden;
     }

@@ -626,10 +626,11 @@ function InspectAppPages() {
 
     .node.app-pages > .pages-inner {
       display: flex;
-      /* flex: 1; */
+      flex: 1;
       flex-direction: column;
 
-      width: var(--page-wid, unset);
+      min-width: var(--page-wid, unset);
+      max-width: var(--page-wid, unset);
 
       overflow: hidden;
     }
@@ -950,7 +951,7 @@ let InspectApp = class InspectApp extends s3 {
         ${this.prime.length >= 1 ? $`
               <div class="pages-inner-resize" @pointerdown="${this.requestMove.bind(this)}" ?node-active="${this.tra}"></div>
 
-              <div class="pages-inner" style="--page-wid: ${100 * (1 - this.frame.rat)}%">
+              <div class="pages-inner">
                 <!---->
                 <div class="node app-tools">
                   <div class="tools-inner"></div>
@@ -1030,44 +1031,31 @@ let InspectApp = class InspectApp extends s3 {
         eve.preventDefault();
         this.tra = true;
         this.requestUpdate();
-        ({
-            rat: this.frame.rat
-        });
-        this.frame;
-        this.parentNode.offsetWidth;
-        let sta;
-        let las;
+        let start;
+        let delta;
         const onMove = (eve)=>{
             if (!this.tra) return;
             eve.preventDefault();
-            const mov = {
-                x: eve.pageX,
-                y: eve.pageY
-            };
-            if (!sta) sta = {
-                ...mov
+            const wid = this.parentNode.offsetWidth;
+            if (!start) start = {
+                x: eve.pageX
             };
             const pos = {
-                x: mov.x - sta.x,
-                y: mov.y - sta.y
+                x: eve.pageX - start.x
             };
-            if (las && las.x == pos.x && las.y == pos.y) return;
-            las = pos;
-            const node = this.shadowRoot.querySelector('.pages-inner-resize');
-            node.style.transform = `translate(${pos.x}px)`;
+            const ros = start.x + pos.x;
+            if (!delta) delta = wid * this.frame.rat - start.x;
+            this.frame.rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
             this.requestUpdate();
         };
         const onExit = (eve)=>{
             eve.preventDefault();
             this.tra = false;
-            requestAnimationFrame(()=>{
-                this.removeEventListener('pointerup', onExit);
-                this.removeEventListener('pointermove', onMove);
-                const node = this.shadowRoot.querySelector('.pages-inner-resize');
-                node.style.transform = ``;
-                this.requestUpdate();
-            });
+            this.removeEventListener('pointerup', onExit);
+            this.removeEventListener('pointermove', onMove);
+            this.requestUpdate();
         };
+        onMove(eve);
         globalThis.addEventListener('lostpointercapture', onExit);
         globalThis.addEventListener('pointerup', onExit);
         globalThis.addEventListener('pointermove', onMove);

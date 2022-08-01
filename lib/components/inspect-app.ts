@@ -67,7 +67,7 @@ class InspectApp extends LitElement {
           ? html`
               <div class="pages-inner-resize" @pointerdown="${this.requestMove.bind(this)}" ?node-active="${this.tra}"></div>
 
-              <div class="pages-inner" style="--page-wid: ${100 * (1 - this.frame.rat)}%">
+              <div class="pages-inner">
                 <!---->
                 <div class="node app-tools">
                   <div class="tools-inner"></div>
@@ -154,30 +154,28 @@ class InspectApp extends LitElement {
     this.tra = true;
     this.requestUpdate();
 
-    const cur = { rat: this.frame.rat };
-    const act = this.frame;
-    const wid = this.parentNode.offsetWidth;
+    let start;
+    let delta;
 
-    let sta;
-    let las;
-    
     const onMove = (eve) => {
       if (!this.tra) return;
-      
+
       eve.preventDefault();
       
       const mov = {x: eve.pageX, y:eve.pageY};
       if (!sta) sta = {...mov};
       const pos = { x: mov.x - sta.x, y: mov.y - sta.y };
 
-      if (las && las.x == pos.x && las.y == pos.y) return;
-      las = pos;
+      const wid = this.parentNode.offsetWidth;
 
-      // ---
-      const node = this.shadowRoot.querySelector('.pages-inner-resize');
-      node.style.transform = `translate(${pos.x}px)`;
-      // ---
+      if (!start) start = { x: eve.pageX };
 
+      const pos = { x: eve.pageX - start.x };
+      const ros = start.x + pos.x;
+
+      if (!delta) delta = wid * this.frame.rat - start.x
+
+      this.frame.rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
       this.requestUpdate();
     };
 
@@ -185,19 +183,12 @@ class InspectApp extends LitElement {
       eve.preventDefault();
       this.tra = false;
 
-      requestAnimationFrame(() => {
-        
-        this.removeEventListener('pointerup', onExit);
-        this.removeEventListener('pointermove', onMove);
-
-        // ---
-        const node = this.shadowRoot.querySelector('.pages-inner-resize');
-        node.style.transform = ``;
-        // ---
-
-        this.requestUpdate();
-      });
+      this.removeEventListener('pointerup', onExit);
+      this.removeEventListener('pointermove', onMove);
+      this.requestUpdate();
     };
+
+    onMove(eve);
 
     globalThis.addEventListener('lostpointercapture', onExit);
     globalThis.addEventListener('pointerup', onExit);
