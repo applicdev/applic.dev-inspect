@@ -152,6 +152,7 @@ class InspectApp extends LitElement {
     eve.preventDefault();
 
     this.tra = true;
+    this.requestUpdate();
 
     const cur = { rat: this.frame.rat };
     const act = this.frame;
@@ -161,6 +162,8 @@ class InspectApp extends LitElement {
     let las;
     
     const onMove = (eve) => {
+      if (!this.tra) return;
+      
       eve.preventDefault();
       
       const mov = {x: eve.pageX, y:eve.pageY};
@@ -178,25 +181,26 @@ class InspectApp extends LitElement {
       this.requestUpdate();
     };
 
-    const onExit = () => {
+    const onExit = (eve) => {
       eve.preventDefault();
+      this.tra = false;
 
       requestAnimationFrame(() => {
-        this.tra = false;
-        this.requestUpdate();
-
+        
         this.removeEventListener('pointerup', onExit);
         this.removeEventListener('pointermove', onMove);
 
         // ---
         const node = this.shadowRoot.querySelector('.pages-inner-resize');
-        node.style.transform = `unset`;
+        node.style.transform = ``;
         // ---
+
+        this.requestUpdate();
       });
     };
 
-    this.addEventListener('pointercancel', onExit, false);
-    this.addEventListener('pointerup', onExit, false);
-    this.addEventListener('pointermove', onMove, false);
+    globalThis.addEventListener('lostpointercapture', onExit);
+    globalThis.addEventListener('pointerup', onExit);
+    globalThis.addEventListener('pointermove', onMove);
   }
 }

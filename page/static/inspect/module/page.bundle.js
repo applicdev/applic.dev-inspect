@@ -636,7 +636,6 @@ function InspectAppPages() {
 
     .pages-inner-resize {
       z-index: 20;
-      cursor: w-resize;
       position: relative;
 
       --rw: 0.25rem;
@@ -644,18 +643,24 @@ function InspectAppPages() {
 
       width: var(--rw);
       margin: -50vh calc(-0.625rem - var(--rw-hal)) -50vh calc(-0.625rem - var(--rw-hal));
-    }
 
-    .pages-inner-resize::before {
-      content: '';
-      cursor: unset;
-
-      position: absolute;
-      inset: 0rem calc(var(--rw) - 0.5rem);
+      cursor: w-resize;
+      touch-action: none;
     }
 
     .pages-inner-resize[node-active] {
       background: #858585;
+    }
+
+    .pages-inner-resize::after {
+      content: '';
+
+      position: absolute;
+      inset: 0rem calc(var(--rw) - 0.5rem);
+    }
+    .pages-inner-resize[node-active]::after {
+      cursor: w-resize;
+      inset: 0rem -100vw;
     }
   `;
 }
@@ -719,8 +724,8 @@ function InspectAppViews() {
       width: min(75%, calc(100% - 1.25rem * 2));
 
       gap: 0.625rem;
-      margin: 0rem auto 0.625rem auto;
-      padding: 0rem 0rem;
+      margin: 0rem auto 1.25rem auto;
+      padding: 0rem 0rem ;
     }
 
     /*  */
@@ -1024,6 +1029,7 @@ let InspectApp = class InspectApp extends s3 {
     requestMove(eve) {
         eve.preventDefault();
         this.tra = true;
+        this.requestUpdate();
         ({
             rat: this.frame.rat
         });
@@ -1032,6 +1038,7 @@ let InspectApp = class InspectApp extends s3 {
         let sta;
         let las;
         const onMove = (eve)=>{
+            if (!this.tra) return;
             eve.preventDefault();
             const mov = {
                 x: eve.pageX,
@@ -1050,20 +1057,20 @@ let InspectApp = class InspectApp extends s3 {
             node.style.transform = `translate(${pos.x}px)`;
             this.requestUpdate();
         };
-        const onExit = ()=>{
+        const onExit = (eve)=>{
             eve.preventDefault();
+            this.tra = false;
             requestAnimationFrame(()=>{
-                this.tra = false;
-                this.requestUpdate();
                 this.removeEventListener('pointerup', onExit);
                 this.removeEventListener('pointermove', onMove);
                 const node = this.shadowRoot.querySelector('.pages-inner-resize');
-                node.style.transform = `unset`;
+                node.style.transform = ``;
+                this.requestUpdate();
             });
         };
-        this.addEventListener('pointercancel', onExit, false);
-        this.addEventListener('pointerup', onExit, false);
-        this.addEventListener('pointermove', onMove, false);
+        globalThis.addEventListener('lostpointercapture', onExit);
+        globalThis.addEventListener('pointerup', onExit);
+        globalThis.addEventListener('pointermove', onMove);
     }
 };
 InspectApp = __decorate5([
