@@ -675,6 +675,20 @@ function InspectAppViews() {
       flex-direction: row;
     }
 
+    .node.app-views > .app-views-plane:not([node-active]) {
+      display: none;
+      pointer-events: none;
+    }
+
+    .node.app-views > .app-views-plane {
+      position: absolute;
+      inset: 0rem 0rem;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    /*  */
     .node.app-views-navigation {
       display: flex;
       flex: none;
@@ -710,7 +724,16 @@ function InspectAppViews() {
 
       font-family: 'BreezeSans', 'Breeze Sans', 'ui-sans-serif', 'system-ui';
       font-size: 1rem;
-      letter-spacing: 0.028ch;
+
+      letter-spacing: 0.012ch;
+      font-weight: 500;
+      color: #252525;
+    }
+
+    .views-navigation-item:not([node-active]) > span {
+      letter-spacing: 0.026ch;
+      font-weight: 400;
+      color: #858585;
     }
   `;
 }
@@ -724,17 +747,22 @@ let InspectAppExports = class InspectAppExports extends s3 {
     static styles = [
         r`
       :host {
-        position: absolute;
-        inset: 0rem 0rem;
-
         display: flex;
         flex: 1;
         flex-direction: column;
       }
+
+      .node.c {
+        display: flex;
+        flex: 1;
+
+        margin: 1.25rem;
+        background: #c5ebdc;
+      }
     `, 
     ];
     render() {
-        return $` <div class="node"></div> `;
+        return $` <div class="node c"></div> `;
     }
 };
 InspectAppExports = __decorate1([
@@ -750,17 +778,22 @@ let InspectAppImports = class InspectAppImports extends s3 {
     static styles = [
         r`
       :host {
-        position: absolute;
-        inset: 0rem 0rem;
-
         display: flex;
         flex: 1;
         flex-direction: column;
       }
+
+      .node.c {
+        display: flex;
+        flex: 1;
+
+        margin: 1.25rem;
+        background: #dce3ff;
+      }
     `, 
     ];
     render() {
-        return $` <div class="node"></div> `;
+        return $` <div class="node c"></div> `;
     }
 };
 InspectAppImports = __decorate2([
@@ -776,17 +809,22 @@ let InspectAppLibrary = class InspectAppLibrary extends s3 {
     static styles = [
         r`
       :host {
-        position: absolute;
-        inset: 0rem 0rem;
-
         display: flex;
         flex: 1;
         flex-direction: column;
       }
+
+      .node.c {
+        display: flex;
+        flex: 1;
+
+        margin: 1.25rem;
+        background: #efefef;
+      }
     `, 
     ];
     render() {
-        return $` <div class="node"></div> `;
+        return $` <div class="node c"></div> `;
     }
 };
 InspectAppLibrary = __decorate3([
@@ -802,17 +840,22 @@ let InspectAppPreview = class InspectAppPreview extends s3 {
     static styles = [
         r`
       :host {
-        position: absolute;
-        inset: 0rem 0rem;
-
         display: flex;
         flex: 1;
         flex-direction: column;
       }
+
+      .node.c {
+        display: flex;
+        flex: 1;
+
+        margin: 1.25rem;
+        background: #f8d8a7;
+      }
     `, 
     ];
     render() {
-        return $` <div class="node"></div> `;
+        return $` <div class="node c"></div> `;
     }
 };
 InspectAppPreview = __decorate4([
@@ -855,7 +898,7 @@ let InspectApp = class InspectApp extends s3 {
           <!---->
           <div class="node app-views">
             <!---->
-            ${this.aside.map((ele)=>ele.node)}
+            ${this.aside.map((ele)=>$`<div class="app-views-plane" ?node-active="${ele.active}">${ele.node}</div> `)}
             <!---->
           </div>
           <!---->
@@ -864,7 +907,7 @@ let InspectApp = class InspectApp extends s3 {
           ${this.aside.length >= 2 ? $`
                 <div class="node app-views-navigation">
                   ${this.aside.map((ele)=>$`
-                      <button class="views-navigation-item">
+                      <button class="views-navigation-item" ?node-active="${ele.active}" @click="${this.requestView.bind(this, ele)}">
                         <span>${ele.caption}</span>
                       </button>
                     `)}
@@ -888,7 +931,7 @@ let InspectApp = class InspectApp extends s3 {
                 <!---->
                 <div class="node app-views">
                   <!---->
-                  ${this.prime.map((ele)=>ele.node)}
+                  ${this.prime.map((ele)=>$`<div class="app-views-plane" ?node-active="${true}">${ele.node}</div> `)}
                   <!---->
                 </div>
                 <!---->
@@ -913,6 +956,10 @@ let InspectApp = class InspectApp extends s3 {
                 pre: {
                     caption: 'Preview',
                     node: new InspectAppPreview()
+                },
+                exp: {
+                    caption: 'Exports',
+                    node: new InspectAppExports()
                 }
             }
         };
@@ -926,14 +973,28 @@ let InspectApp = class InspectApp extends s3 {
     updated() {
         const seg = Object.values(this.frame.ele);
         this.prime = this.frame.lay >= 1 ? [
-            seg.pop()
+            seg.shift()
         ] : [];
         this.aside = this.frame.lay >= 1 ? seg : seg;
+        const act = this.aside.filter((seg)=>seg.active);
+        if (act.length <= 0) {
+            Object.values(this.frame.ele).map((seg)=>{
+                seg.active = false;
+            });
+            this.aside[0].active = true;
+        }
     }
     whenTranslate() {
         this.frame.lay = this.parentNode.offsetWidth < 840 ? 0 : 1;
         this.requestUpdate();
         requestAnimationFrame(()=>this.requestUpdate());
+    }
+    requestView(ele) {
+        Object.values(this.frame.ele).map((seg)=>{
+            seg.active = false;
+        });
+        ele.active = true;
+        this.requestUpdate();
     }
 };
 InspectApp = __decorate5([

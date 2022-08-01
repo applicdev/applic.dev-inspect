@@ -6,17 +6,22 @@ export class InspectAppPreview extends LitElement {
   static styles = [
     css`
       :host {
-        position: absolute;
-        inset: 0rem 0rem;
-
         display: flex;
         flex: 1;
         flex-direction: column;
+      }
+
+      .node.c {
+        display: flex;
+        flex: 1;
+
+        margin: 1.25rem;
+        background: #f8d8a7;
       }
     `,
   ];
 
   render() {
-    return html` <div class="node"></div> `;
+    return html` <div class="node c"></div> `;
   }
 }

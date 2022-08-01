@@ -11,6 +11,20 @@ export function InspectAppViews() {
       flex-direction: row;
     }
 
+    .node.app-views > .app-views-plane:not([node-active]) {
+      display: none;
+      pointer-events: none;
+    }
+
+    .node.app-views > .app-views-plane {
+      position: absolute;
+      inset: 0rem 0rem;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    /*  */
     .node.app-views-navigation {
       display: flex;
       flex: none;
@@ -46,7 +60,16 @@ export function InspectAppViews() {
 
       font-family: 'BreezeSans', 'Breeze Sans', 'ui-sans-serif', 'system-ui';
       font-size: 1rem;
-      letter-spacing: 0.028ch;
+
+      letter-spacing: 0.012ch;
+      font-weight: 500;
+      color: #252525;
+    }
+
+    .views-navigation-item:not([node-active]) > span {
+      letter-spacing: 0.026ch;
+      font-weight: 400;
+      color: #858585;
     }
   `;
 }
