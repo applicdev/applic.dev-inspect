@@ -626,14 +626,27 @@ function InspectAppPages() {
 
     .node.app-pages > .pages-inner {
       display: flex;
-      flex: 1;
+      /* flex: 1; */
       flex-direction: column;
+
+      width: var(--page-wid, unset);
 
       overflow: hidden;
     }
 
     .pages-inner-resize {
-      width: 0.25rem;
+      z-index: 20;
+      cursor: w-resize;
+
+      --rw: 0.3125rem;
+      --rw-hal: calc(var(--rw) / 2);
+
+      width: var(--rw);
+      margin: -50vh calc(-0.625rem - var(--rw-hal)) -50vh calc(-0.625rem - var(--rw-hal));
+    }
+
+    .pages-inner-resize[node-active] {
+      background: #636363;
     }
   `;
 }
@@ -876,6 +889,8 @@ let InspectApp = class InspectApp extends s3 {
         display: flex;
         flex: 1;
         flex-direction: column;
+
+        overflow: hidden;
       }
 
       ${InspectAppPages()}
@@ -887,7 +902,7 @@ let InspectApp = class InspectApp extends s3 {
         return $`
       <div class="node app-pages">
         <!---->
-        <div class="pages-inner">
+        <div class="pages-inner" style="--page-wid: ${this.prime.length >= 1 ? 100 * this.frame.rat : 100}%">
           <!---->
           <div class="node app-tools">
             <div class="tools-focus"></div>
@@ -919,9 +934,9 @@ let InspectApp = class InspectApp extends s3 {
 
         <!---->
         ${this.prime.length >= 1 ? $`
-              <div class="pages-inner-resize"></div>
+              <div class="pages-inner-resize" @pointerdown="${this.requestMove.bind(this)}" ?node-active="${this.tra}"></div>
 
-              <div class="pages-inner">
+              <div class="pages-inner" style="--page-wid: ${100 * (1 - this.frame.rat)}%">
                 <!---->
                 <div class="node app-tools">
                   <div class="tools-inner"></div>
@@ -948,6 +963,7 @@ let InspectApp = class InspectApp extends s3 {
         super.connectedCallback();
         globalThis.document.title = `Inspect - Twitch Elements`;
         this.frame = {
+            rat: 1 / 2.5,
             ele: {
                 imp: {
                     caption: 'Imports',
@@ -995,6 +1011,29 @@ let InspectApp = class InspectApp extends s3 {
         });
         ele.active = true;
         this.requestUpdate();
+    }
+    requestMove(eve) {
+        eve.preventDefault();
+        this.tra = true;
+        this.requestUpdate();
+        const onExit = ()=>{
+            eve.preventDefault();
+            requestAnimationFrame(()=>{
+                this.tra = false;
+                this.requestUpdate();
+                console.debug('exit');
+                this.removeEventListener('pointerup', onExit);
+                this.removeEventListener('pointermove', onMove);
+            });
+        };
+        const onMove = (eve)=>{
+            eve.preventDefault();
+            console.debug('move');
+            this.requestUpdate();
+        };
+        this.addEventListener('pointercancel', onExit, false);
+        this.addEventListener('pointerup', onExit, false);
+        this.addEventListener('pointermove', onMove, false);
     }
 };
 InspectApp = __decorate5([
