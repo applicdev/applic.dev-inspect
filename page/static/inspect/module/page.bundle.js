@@ -636,17 +636,31 @@ function InspectAppPages() {
 
     .pages-inner-resize {
       z-index: 20;
-      cursor: w-resize;
+      position: relative;
 
-      --rw: 0.3125rem;
+      --rw: 0.25rem;
       --rw-hal: calc(var(--rw) / 2);
 
       width: var(--rw);
       margin: -50vh calc(-0.625rem - var(--rw-hal)) -50vh calc(-0.625rem - var(--rw-hal));
+
+      cursor: w-resize;
+      touch-action: none;
     }
 
     .pages-inner-resize[node-active] {
-      background: #636363;
+      background: #858585;
+    }
+
+    .pages-inner-resize::after {
+      content: '';
+
+      position: absolute;
+      inset: 0rem calc(var(--rw) - 0.5rem);
+    }
+    .pages-inner-resize[node-active]::after {
+      cursor: w-resize;
+      inset: 0rem -100vw;
     }
   `;
 }
@@ -710,8 +724,8 @@ function InspectAppViews() {
       width: min(75%, calc(100% - 1.25rem * 2));
 
       gap: 0.625rem;
-      margin: 0rem auto 0.625rem auto;
-      padding: 0rem 0rem;
+      margin: 0rem auto 1.25rem auto;
+      padding: 0rem 0rem ;
     }
 
     /*  */
@@ -1016,24 +1030,47 @@ let InspectApp = class InspectApp extends s3 {
         eve.preventDefault();
         this.tra = true;
         this.requestUpdate();
-        const onExit = ()=>{
-            eve.preventDefault();
-            requestAnimationFrame(()=>{
-                this.tra = false;
-                this.requestUpdate();
-                console.debug('exit');
-                this.removeEventListener('pointerup', onExit);
-                this.removeEventListener('pointermove', onMove);
-            });
-        };
+        ({
+            rat: this.frame.rat
+        });
+        this.frame;
+        this.parentNode.offsetWidth;
+        let sta;
+        let las;
         const onMove = (eve)=>{
+            if (!this.tra) return;
             eve.preventDefault();
-            console.debug('move');
+            const mov = {
+                x: eve.pageX,
+                y: eve.pageY
+            };
+            if (!sta) sta = {
+                ...mov
+            };
+            const pos = {
+                x: mov.x - sta.x,
+                y: mov.y - sta.y
+            };
+            if (las && las.x == pos.x && las.y == pos.y) return;
+            las = pos;
+            const node = this.shadowRoot.querySelector('.pages-inner-resize');
+            node.style.transform = `translate(${pos.x}px)`;
             this.requestUpdate();
         };
-        this.addEventListener('pointercancel', onExit, false);
-        this.addEventListener('pointerup', onExit, false);
-        this.addEventListener('pointermove', onMove, false);
+        const onExit = (eve)=>{
+            eve.preventDefault();
+            this.tra = false;
+            requestAnimationFrame(()=>{
+                this.removeEventListener('pointerup', onExit);
+                this.removeEventListener('pointermove', onMove);
+                const node = this.shadowRoot.querySelector('.pages-inner-resize');
+                node.style.transform = ``;
+                this.requestUpdate();
+            });
+        };
+        globalThis.addEventListener('lostpointercapture', onExit);
+        globalThis.addEventListener('pointerup', onExit);
+        globalThis.addEventListener('pointermove', onMove);
     }
 };
 InspectApp = __decorate5([

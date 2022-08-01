@@ -33,8 +33,8 @@ export function InspectAppViews() {
       width: min(75%, calc(100% - 1.25rem * 2));
 
       gap: 0.625rem;
-      margin: 0rem auto 0.625rem auto;
-      padding: 0rem 0rem;
+      margin: 0rem auto 1.25rem auto;
+      padding: 0rem 0rem ;
     }
 
     /*  */

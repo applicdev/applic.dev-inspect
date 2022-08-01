@@ -154,28 +154,53 @@ class InspectApp extends LitElement {
     this.tra = true;
     this.requestUpdate();
 
-    const onExit = () => {
-      eve.preventDefault();
+    const cur = { rat: this.frame.rat };
+    const act = this.frame;
+    const wid = this.parentNode.offsetWidth;
 
-      requestAnimationFrame(() => {
-        this.tra = false;
-        this.requestUpdate();
-
-        console.debug('exit');
-        this.removeEventListener('pointerup', onExit);
-        this.removeEventListener('pointermove', onMove);
-      });
-    };
-
+    let sta;
+    let las;
+    
     const onMove = (eve) => {
+      if (!this.tra) return;
+      
       eve.preventDefault();
+      
+      const mov = {x: eve.pageX, y:eve.pageY};
+      if (!sta) sta = {...mov};
+      const pos = { x: mov.x - sta.x, y: mov.y - sta.y };
 
-      console.debug('move');
+      if (las && las.x == pos.x && las.y == pos.y) return;
+      las = pos;
+
+      // ---
+      const node = this.shadowRoot.querySelector('.pages-inner-resize');
+      node.style.transform = `translate(${pos.x}px)`;
+      // ---
+
       this.requestUpdate();
     };
 
-    this.addEventListener('pointercancel', onExit, false);
-    this.addEventListener('pointerup', onExit, false);
-    this.addEventListener('pointermove', onMove, false);
+    const onExit = (eve) => {
+      eve.preventDefault();
+      this.tra = false;
+
+      requestAnimationFrame(() => {
+        
+        this.removeEventListener('pointerup', onExit);
+        this.removeEventListener('pointermove', onMove);
+
+        // ---
+        const node = this.shadowRoot.querySelector('.pages-inner-resize');
+        node.style.transform = ``;
+        // ---
+
+        this.requestUpdate();
+      });
+    };
+
+    globalThis.addEventListener('lostpointercapture', onExit);
+    globalThis.addEventListener('pointerup', onExit);
+    globalThis.addEventListener('pointermove', onMove);
   }
 }
