@@ -14,6 +14,8 @@ class InspectApp extends LitElement {
         display: flex;
         flex: 1;
         flex-direction: column;
+
+        overflow: hidden;
       }
 
       ${Pattern.InspectAppPages()}
@@ -26,7 +28,7 @@ class InspectApp extends LitElement {
     return html`
       <div class="node app-pages">
         <!---->
-        <div class="pages-inner">
+        <div class="pages-inner" style="--page-wid: ${this.prime.length >= 1 ? 100 * this.frame.rat : 100}%">
           <!---->
           <div class="node app-tools">
             <div class="tools-focus"></div>
@@ -63,9 +65,9 @@ class InspectApp extends LitElement {
         <!---->
         ${this.prime.length >= 1
           ? html`
-              <div class="pages-inner-resize"></div>
+              <div class="pages-inner-resize" @pointerdown="${this.requestMove.bind(this)}" ?node-active="${this.tra}"></div>
 
-              <div class="pages-inner">
+              <div class="pages-inner" style="--page-wid: ${100 * (1 - this.frame.rat)}%">
                 <!---->
                 <div class="node app-tools">
                   <div class="tools-inner"></div>
@@ -96,6 +98,7 @@ class InspectApp extends LitElement {
     globalThis.document.title = `Inspect - Twitch Elements`;
 
     this.frame = {
+      rat: 1 / 2.5,
       ele: {
         imp: { caption: 'Imports', node: new Segment.InspectAppImports() },
         pre: { caption: 'Preview', node: new Segment.InspectAppPreview() },
@@ -143,5 +146,36 @@ class InspectApp extends LitElement {
 
     ele.active = true;
     this.requestUpdate();
+  }
+
+  requestMove(eve) {
+    eve.preventDefault();
+
+    this.tra = true;
+    this.requestUpdate();
+
+    const onExit = () => {
+      eve.preventDefault();
+
+      requestAnimationFrame(() => {
+        this.tra = false;
+        this.requestUpdate();
+
+        console.debug('exit');
+        this.removeEventListener('pointerup', onExit);
+        this.removeEventListener('pointermove', onMove);
+      });
+    };
+
+    const onMove = (eve) => {
+      eve.preventDefault();
+
+      console.debug('move');
+      this.requestUpdate();
+    };
+
+    this.addEventListener('pointercancel', onExit, false);
+    this.addEventListener('pointerup', onExit, false);
+    this.addEventListener('pointermove', onMove, false);
   }
 }
