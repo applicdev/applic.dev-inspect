@@ -637,16 +637,25 @@ function InspectAppPages() {
     .pages-inner-resize {
       z-index: 20;
       cursor: w-resize;
+      position: relative;
 
-      --rw: 0.3125rem;
+      --rw: 0.25rem;
       --rw-hal: calc(var(--rw) / 2);
 
       width: var(--rw);
       margin: -50vh calc(-0.625rem - var(--rw-hal)) -50vh calc(-0.625rem - var(--rw-hal));
     }
 
+    .pages-inner-resize::before {
+      content: '';
+      cursor: unset;
+
+      position: absolute;
+      inset: 0rem calc(var(--rw) - 0.5rem);
+    }
+
     .pages-inner-resize[node-active] {
-      background: #636363;
+      background: #858585;
     }
   `;
 }
@@ -1015,21 +1024,42 @@ let InspectApp = class InspectApp extends s3 {
     requestMove(eve) {
         eve.preventDefault();
         this.tra = true;
-        this.requestUpdate();
+        ({
+            rat: this.frame.rat
+        });
+        this.frame;
+        this.parentNode.offsetWidth;
+        let sta;
+        let las;
+        const onMove = (eve)=>{
+            eve.preventDefault();
+            const mov = {
+                x: eve.pageX,
+                y: eve.pageY
+            };
+            if (!sta) sta = {
+                ...mov
+            };
+            const pos = {
+                x: mov.x - sta.x,
+                y: mov.y - sta.y
+            };
+            if (las && las.x == pos.x && las.y == pos.y) return;
+            las = pos;
+            const node = this.shadowRoot.querySelector('.pages-inner-resize');
+            node.style.transform = `translate(${pos.x}px)`;
+            this.requestUpdate();
+        };
         const onExit = ()=>{
             eve.preventDefault();
             requestAnimationFrame(()=>{
                 this.tra = false;
                 this.requestUpdate();
-                console.debug('exit');
                 this.removeEventListener('pointerup', onExit);
                 this.removeEventListener('pointermove', onMove);
+                const node = this.shadowRoot.querySelector('.pages-inner-resize');
+                node.style.transform = `unset`;
             });
-        };
-        const onMove = (eve)=>{
-            eve.preventDefault();
-            console.debug('move');
-            this.requestUpdate();
         };
         this.addEventListener('pointercancel', onExit, false);
         this.addEventListener('pointerup', onExit, false);

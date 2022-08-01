@@ -152,7 +152,31 @@ class InspectApp extends LitElement {
     eve.preventDefault();
 
     this.tra = true;
-    this.requestUpdate();
+
+    const cur = { rat: this.frame.rat };
+    const act = this.frame;
+    const wid = this.parentNode.offsetWidth;
+
+    let sta;
+    let las;
+    
+    const onMove = (eve) => {
+      eve.preventDefault();
+      
+      const mov = {x: eve.pageX, y:eve.pageY};
+      if (!sta) sta = {...mov};
+      const pos = { x: mov.x - sta.x, y: mov.y - sta.y };
+
+      if (las && las.x == pos.x && las.y == pos.y) return;
+      las = pos;
+
+      // ---
+      const node = this.shadowRoot.querySelector('.pages-inner-resize');
+      node.style.transform = `translate(${pos.x}px)`;
+      // ---
+
+      this.requestUpdate();
+    };
 
     const onExit = () => {
       eve.preventDefault();
@@ -161,17 +185,14 @@ class InspectApp extends LitElement {
         this.tra = false;
         this.requestUpdate();
 
-        console.debug('exit');
         this.removeEventListener('pointerup', onExit);
         this.removeEventListener('pointermove', onMove);
+
+        // ---
+        const node = this.shadowRoot.querySelector('.pages-inner-resize');
+        node.style.transform = `unset`;
+        // ---
       });
-    };
-
-    const onMove = (eve) => {
-      eve.preventDefault();
-
-      console.debug('move');
-      this.requestUpdate();
     };
 
     this.addEventListener('pointercancel', onExit, false);
