@@ -159,7 +159,12 @@ class InspectApp extends LitElement {
 
     const onMove = (eve) => {
       if (!this.tra) return;
+
       eve.preventDefault();
+      
+      const mov = {x: eve.pageX, y:eve.pageY};
+      if (!sta) sta = {...mov};
+      const pos = { x: mov.x - sta.x, y: mov.y - sta.y };
 
       const wid = this.parentNode.offsetWidth;
 
