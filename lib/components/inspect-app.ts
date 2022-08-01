@@ -37,7 +37,7 @@ class InspectApp extends LitElement {
           <!---->
           <div class="node app-views">
             <!---->
-            ${this.aside.map((ele) => ele.node)}
+            ${this.aside.map((ele) => html`<div class="app-views-plane" ?node-active="${ele.active}">${ele.node}</div> `)}
             <!---->
           </div>
           <!---->
@@ -48,7 +48,7 @@ class InspectApp extends LitElement {
                 <div class="node app-views-navigation">
                   ${this.aside.map(
                     (ele) => html`
-                      <button class="views-navigation-item">
+                      <button class="views-navigation-item" ?node-active="${ele.active}" @click="${this.requestView.bind(this, ele)}">
                         <span>${ele.caption}</span>
                       </button>
                     `
@@ -75,7 +75,7 @@ class InspectApp extends LitElement {
                 <!---->
                 <div class="node app-views">
                   <!---->
-                  ${this.prime.map((ele) => ele.node)}
+                  ${this.prime.map((ele) => html`<div class="app-views-plane" ?node-active="${true}">${ele.node}</div> `)}
                   <!---->
                 </div>
                 <!---->
@@ -99,7 +99,7 @@ class InspectApp extends LitElement {
       ele: {
         imp: { caption: 'Imports', node: new Segment.InspectAppImports() },
         pre: { caption: 'Preview', node: new Segment.InspectAppPreview() },
-        // exp: { caption: 'Exports', node: new Segment.InspectAppExports() },
+        exp: { caption: 'Exports', node: new Segment.InspectAppExports() },
         // lib: { caption: 'Library', node: new Segment.InspectAppLibrary() },
       },
     };
@@ -116,14 +116,32 @@ class InspectApp extends LitElement {
   updated() {
     const seg = Object.values(this.frame.ele);
 
-    this.prime = this.frame.lay >= 1 ? [seg.pop()]: [];
+    this.prime = this.frame.lay >= 1 ? [seg.shift()] : [];
     this.aside = this.frame.lay >= 1 ? seg : seg;
+
+    const act = this.aside.filter((seg) => seg.active);
+    if (act.length <= 0) {
+      Object.values(this.frame.ele).map((seg) => {
+        seg.active = false;
+      });
+
+      this.aside[0].active = true;
+    }
   }
 
   whenTranslate() {
     this.frame.lay = this.parentNode.offsetWidth < 840 ? 0 : 1;
-    
+
     this.requestUpdate();
     requestAnimationFrame(() => this.requestUpdate());
+  }
+
+  requestView(ele) {
+    Object.values(this.frame.ele).map((seg) => {
+      seg.active = false;
+    });
+
+    ele.active = true;
+    this.requestUpdate();
   }
 }
