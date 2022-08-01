@@ -26,7 +26,9 @@ const Seo = ({ ...customMeta }) => {
   return (
     <Head>
       <meta content='index, follow' name='robots' />
-      <meta content='width=device-width, initial-scale=1, user-scalable=no' name='viewport' />
+      {/* FIXME: fresh also adds a viewport meta node
+      <meta content='width=device-width, initial-scale=1, user-scalable=no' name='viewport' /> 
+      */}
 
       {/*  */}
       <title>{meta.name}</title>
@@ -39,8 +41,8 @@ const Seo = ({ ...customMeta }) => {
       {/*  */}
 
       {/*  */}
-      <meta content='#f6f6f7' name='theme-color' />
-      <meta content='#f6f6f7' name='theme-color' media='(prefers-color-scheme: light)' />
+      <meta content='#f6f6f6' name='theme-color' />
+      <meta content='#f6f6f6' name='theme-color' media='(prefers-color-scheme: light)' />
       <meta content='#171b22' name='theme-color' media='(prefers-color-scheme: dark)' />
       <link href='/inspect/page.webmanifest' rel='manifest' />
       {/*  */}
