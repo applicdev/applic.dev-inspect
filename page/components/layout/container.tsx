@@ -41,8 +41,8 @@ const Seo = ({ ...customMeta }) => {
       {/*  */}
 
       {/*  */}
-      <meta content='#f6f6f7' name='theme-color' />
-      <meta content='#f6f6f7' name='theme-color' media='(prefers-color-scheme: light)' />
+      <meta content='#f6f6f6' name='theme-color' />
+      <meta content='#f6f6f6' name='theme-color' media='(prefers-color-scheme: light)' />
       <meta content='#171b22' name='theme-color' media='(prefers-color-scheme: dark)' />
       <link href='/inspect/page.webmanifest' rel='manifest' />
       {/*  */}

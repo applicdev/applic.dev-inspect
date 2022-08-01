@@ -13,7 +13,7 @@ export class PageBounds extends LitElement {
         flex: none;
         flex-direction: column;
 
-        background: #f6f6f7;
+        background: #f6f6f6;
       }
 
       .node.bounds-warp {

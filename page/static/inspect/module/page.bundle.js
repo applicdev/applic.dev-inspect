@@ -590,7 +590,7 @@ let PageBounds = class PageBounds extends s3 {
         flex: none;
         flex-direction: column;
 
-        background: #f6f6f7;
+        background: #f6f6f6;
       }
 
       .node.bounds-warp {
@@ -615,7 +615,210 @@ let PageBounds = class PageBounds extends s3 {
 PageBounds = __decorate([
     n4('page-bounds')
 ], PageBounds);
+function InspectAppPages() {
+    return r`
+    /*  */
+    .node.app-pages {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+    }
+
+    .node.app-pages > .pages-inner {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+
+      overflow: hidden;
+    }
+
+    .pages-inner-resize {
+      width: 0.25rem;
+    }
+  `;
+}
+function InspectAppTools() {
+    return r`
+    /*  */
+    .node.app-tools {
+      display: flex;
+      flex: none;
+      flex-direction: row;
+
+      height: 3rem;
+      background: #f6f6f6;
+    }
+
+    .node.app-tools > .tools-focus {
+      display: flex;
+      flex: none;
+      flex-direction: row;
+
+      height: 3rem;
+      width: 3rem;
+
+      background: #f6f6f6;
+    }
+
+    .node.app-tools > .tools-inner {
+    }
+  `;
+}
+function InspectAppViews() {
+    return r`
+    /*  */
+    .node.app-views {
+      position: relative;
+
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+    }
+
+    .node.app-views-navigation {
+      display: flex;
+      flex: none;
+      flex-direction: row;
+
+      width: min(75%, calc(100% - 1.25rem * 2));
+
+      gap: 0.625rem;
+      margin: 0rem auto 0.625rem auto;
+      padding: 0rem 0rem;
+    }
+
+    /*  */
+    .views-navigation-item {
+      all: unset;
+
+      display: flex;
+      flex: auto;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      height: 2.5rem;
+
+      margin: 0rem 0rem;
+      padding: 0rem 0.625rem;
+
+      cursor: pointer;
+    }
+
+    .views-navigation-item > span {
+      flex: none;
+
+      font-family: 'BreezeSans', 'Breeze Sans', 'ui-sans-serif', 'system-ui';
+      font-size: 1rem;
+      letter-spacing: 0.028ch;
+    }
+  `;
+}
 var __decorate1 = this && this.__decorate || function(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for(var i = decorators.length - 1; i >= 0; i--)if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+let InspectAppExports = class InspectAppExports extends s3 {
+    static styles = [
+        r`
+      :host {
+        position: absolute;
+        inset: 0rem 0rem;
+
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+      }
+    `, 
+    ];
+    render() {
+        return $` <div class="node"></div> `;
+    }
+};
+InspectAppExports = __decorate1([
+    n4('inspect-app-exports')
+], InspectAppExports);
+var __decorate2 = this && this.__decorate || function(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for(var i = decorators.length - 1; i >= 0; i--)if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+let InspectAppImports = class InspectAppImports extends s3 {
+    static styles = [
+        r`
+      :host {
+        position: absolute;
+        inset: 0rem 0rem;
+
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+      }
+    `, 
+    ];
+    render() {
+        return $` <div class="node"></div> `;
+    }
+};
+InspectAppImports = __decorate2([
+    n4('inspect-app-imports')
+], InspectAppImports);
+var __decorate3 = this && this.__decorate || function(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for(var i = decorators.length - 1; i >= 0; i--)if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+let InspectAppLibrary = class InspectAppLibrary extends s3 {
+    static styles = [
+        r`
+      :host {
+        position: absolute;
+        inset: 0rem 0rem;
+
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+      }
+    `, 
+    ];
+    render() {
+        return $` <div class="node"></div> `;
+    }
+};
+InspectAppLibrary = __decorate3([
+    n4('inspect-app-library')
+], InspectAppLibrary);
+var __decorate4 = this && this.__decorate || function(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for(var i = decorators.length - 1; i >= 0; i--)if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+let InspectAppPreview = class InspectAppPreview extends s3 {
+    static styles = [
+        r`
+      :host {
+        position: absolute;
+        inset: 0rem 0rem;
+
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+      }
+    `, 
+    ];
+    render() {
+        return $` <div class="node"></div> `;
+    }
+};
+InspectAppPreview = __decorate4([
+    n4('inspect-app-preview')
+], InspectAppPreview);
+var __decorate5 = this && this.__decorate || function(decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for(var i = decorators.length - 1; i >= 0; i--)if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
@@ -632,41 +835,108 @@ let InspectApp = class InspectApp extends s3 {
         flex-direction: column;
       }
 
-      .node.app-navigation {
-      }
+      ${InspectAppPages()}
+      ${InspectAppViews()}
+      ${InspectAppTools()}
     `, 
     ];
     render() {
         return $`
-      <!---->
-      <div class="node bounds-warp">
+      <div class="node app-pages">
         <!---->
-        <div>
-          <inspect-app-directories></inspect-app-directories>
+        <div class="pages-inner">
+          <!---->
+          <div class="node app-tools">
+            <div class="tools-focus"></div>
+            <div class="tools-inner"></div>
+          </div>
+          <!---->
+
+          <!---->
+          <div class="node app-views">
+            <!---->
+            ${this.aside.map((ele)=>ele.node)}
+            <!---->
+          </div>
+          <!---->
+
+          <!---->
+          ${this.aside.length >= 2 ? $`
+                <div class="node app-views-navigation">
+                  ${this.aside.map((ele)=>$`
+                      <button class="views-navigation-item">
+                        <span>${ele.caption}</span>
+                      </button>
+                    `)}
+                </div>
+              ` : $``}
+          <!---->
         </div>
         <!---->
 
         <!---->
-        <div>
-          <inspect-app-viewing></inspect-app-viewing>
-        </div>
+        ${this.prime.length >= 1 ? $`
+              <div class="pages-inner-resize"></div>
+
+              <div class="pages-inner">
+                <!---->
+                <div class="node app-tools">
+                  <div class="tools-inner"></div>
+                </div>
+                <!---->
+
+                <!---->
+                <div class="node app-views">
+                  <!---->
+                  ${this.prime.map((ele)=>ele.node)}
+                  <!---->
+                </div>
+                <!---->
+              </div>
+            ` : $``}
         <!---->
       </div>
-      <!---->
-
-      <!---->
-      <div class="node app-navigation">
-        <span>Hello!</span>
-      </div>
-      <!---->
     `;
     }
+    frame;
+    aside;
+    prime;
     connectedCallback() {
         super.connectedCallback();
         globalThis.document.title = `Inspect - Twitch Elements`;
+        this.frame = {
+            ele: {
+                imp: {
+                    caption: 'Imports',
+                    node: new InspectAppImports()
+                },
+                pre: {
+                    caption: 'Preview',
+                    node: new InspectAppPreview()
+                }
+            }
+        };
+        this.aside = [];
+        this.prime = [];
+    }
+    firstUpdated() {
+        globalThis.addEventListener('resize', this.whenTranslate.bind(this), false);
+        this.whenTranslate();
+    }
+    updated() {
+        const seg = Object.values(this.frame.ele);
+        this.prime = this.frame.lay >= 1 ? [
+            seg.pop()
+        ] : [];
+        this.aside = this.frame.lay >= 1 ? seg : seg;
+    }
+    whenTranslate() {
+        this.frame.lay = this.parentNode.offsetWidth < 840 ? 0 : 1;
+        this.requestUpdate();
+        requestAnimationFrame(()=>this.requestUpdate());
     }
 };
-InspectApp = __decorate1([
+InspectApp = __decorate5([
     n4('inspect-app')
 ], InspectApp);
 

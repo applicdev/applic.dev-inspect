@@ -9,8 +9,8 @@ const DATA = {
   start_url: PAGE['_app'].og.url,
   display: 'standalone',
   display_override: ['standalone', 'window-controls-overlay'],
-  background_color: '#f6f6f7',
-  theme_color: '#f6f6f7',
+  background_color: '#f6f6f6',
+  theme_color: '#f6f6f6',
   categories: ['games', 'education'],
   icons: [
     { src: '/inspect/assets/figure/512w/page.png', sizes: '512x512', type: 'image/png' },
