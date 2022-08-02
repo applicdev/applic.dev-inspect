@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
+import * as Actions from './actions/mod.ts';
 import * as Pattern from './pattern/mod.ts';
 import * as Segment from './segment/mod.ts';
 
@@ -151,20 +152,29 @@ class InspectApp extends LitElement {
   requestMove(eve) {
     eve.preventDefault();
 
-    this.tra = true;
-    this.requestUpdate();
+    // ?
+    if (globalThis.performance.now() - this.frame.ratLas <= 250) {
+      this.frame.rat = 1 / 2.5;
+      this.whenTranslate();
 
-    let start;
-    let delta;
+      return;
+    }
+
+    this.frame.ratLas = globalThis.performance.now();
+
+    // ?
+    let close;
+    const wid = this.parentNode.offsetWidth;
+
+    const start = { x: eve.pageX };
+    const delta = wid * this.frame.rat - start.x;
+
+    this.whenTranslate();
 
     const onMove = (eve) => {
-      if (!this.tra) return;
+      if (close) return;
 
       eve.preventDefault();
-      
-      const mov = {x: eve.pageX, y:eve.pageY};
-      if (!sta) sta = {...mov};
-      const pos = { x: mov.x - sta.x, y: mov.y - sta.y };
 
       const wid = this.parentNode.offsetWidth;
 
@@ -173,19 +183,32 @@ class InspectApp extends LitElement {
       const pos = { x: eve.pageX - start.x };
       const ros = start.x + pos.x;
 
-      if (!delta) delta = wid * this.frame.rat - start.x
+      if (!delta) delta = wid * this.frame.rat - start.x;
 
-      this.frame.rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
-      this.requestUpdate();
+      const rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
+
+      // ? hast to move by more than one pixel;
+      if (!this.tra && Math.abs(wid * rat - wid * this.frame.rat) <= 1) return;
+
+      this.tra = true;
+      this.frame.rat = rat;
+      this.whenTranslate();
     };
 
-    const onExit = (eve) => {
+    const onExit = async (eve) => {
+      if (close) return;
+
       eve.preventDefault();
+
+      close = true;
       this.tra = false;
 
       this.removeEventListener('pointerup', onExit);
       this.removeEventListener('pointermove', onMove);
-      this.requestUpdate();
+
+      requestAnimationFrame(() => {
+        this.whenTranslate();
+      });
     };
 
     onMove(eve);

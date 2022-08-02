@@ -635,15 +635,21 @@ function InspectAppPages() {
       overflow: hidden;
     }
 
+    .node.app-pages > .pages-inner:not(:first-child) {
+      margin-left: -0.625rem;
+    }
+
+    .node.app-pages > .pages-inner:not(:last-child) {
+      margin-right: -0.625rem;
+    }
+
+    /*  */
     .pages-inner-resize {
       z-index: 20;
       position: relative;
 
-      --rw: 0.25rem;
-      --rw-hal: calc(var(--rw) / 2);
-
-      width: var(--rw);
-      margin: -50vh calc(-0.625rem - var(--rw-hal)) -50vh calc(-0.625rem - var(--rw-hal));
+      width: 0.25rem;
+      margin: -50vh -0.125rem;
 
       cursor: w-resize;
       touch-action: none;
@@ -657,7 +663,7 @@ function InspectAppPages() {
       content: '';
 
       position: absolute;
-      inset: 0rem calc(var(--rw) - 0.5rem);
+      inset: 0rem calc(0.25rem - 0.5rem);
     }
     .pages-inner-resize[node-active]::after {
       cursor: w-resize;
@@ -725,8 +731,16 @@ function InspectAppViews() {
       width: min(75%, calc(100% - 1.25rem * 2));
 
       gap: 0.625rem;
-      margin: 0rem auto 1.25rem auto;
-      padding: 0rem 0rem ;
+      margin: 0rem auto 0rem auto;
+      padding: 0rem 0rem 1.25rem 0rem;
+
+      overflow-y: hidden;
+      overflow-x: auto;
+      overflow-x: overlay;
+    }
+
+    .node.app-views-navigation::-webkit-scrollbar {
+      display: none;
     }
 
     /*  */
@@ -743,7 +757,8 @@ function InspectAppViews() {
 
       margin: 0rem 0rem;
       padding: 0rem 0.625rem;
-
+      
+      -webkit-tap-highlight-color: transparent;
       cursor: pointer;
     }
 
@@ -752,16 +767,22 @@ function InspectAppViews() {
 
       font-family: 'BreezeSans', 'Breeze Sans', 'ui-sans-serif', 'system-ui';
       font-size: 1rem;
+      line-height: 1.25rem;
 
       letter-spacing: 0.012ch;
       font-weight: 500;
-      color: #252525;
+      color: #3a3a3a;
+
+      border-top: 2.5px solid transparent;
+      border-bottom: 2.5px solid currentColor;
     }
 
     .views-navigation-item:not([node-active]) > span {
       letter-spacing: 0.026ch;
       font-weight: 400;
-      color: #858585;
+      color: #909090;
+
+      border-color: transparent;
     }
   `;
 }
@@ -1029,12 +1050,21 @@ let InspectApp = class InspectApp extends s3 {
     }
     requestMove(eve) {
         eve.preventDefault();
-        this.tra = true;
-        this.requestUpdate();
-        let start;
-        let delta;
+        if (globalThis.performance.now() - this.frame.ratLas <= 250) {
+            this.frame.rat = 1 / 2.5;
+            this.whenTranslate();
+            return;
+        }
+        this.frame.ratLas = globalThis.performance.now();
+        let close;
+        const wid = this.parentNode.offsetWidth;
+        const start = {
+            x: eve.pageX
+        };
+        const delta = wid * this.frame.rat - start.x;
+        this.whenTranslate();
         const onMove = (eve)=>{
-            if (!this.tra) return;
+            if (close) return;
             eve.preventDefault();
             const wid = this.parentNode.offsetWidth;
             if (!start) start = {
@@ -1045,15 +1075,22 @@ let InspectApp = class InspectApp extends s3 {
             };
             const ros = start.x + pos.x;
             if (!delta) delta = wid * this.frame.rat - start.x;
-            this.frame.rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
-            this.requestUpdate();
+            const rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
+            if (!this.tra && Math.abs(wid * rat - wid * this.frame.rat) <= 1) return;
+            this.tra = true;
+            this.frame.rat = rat;
+            this.whenTranslate();
         };
-        const onExit = (eve)=>{
+        const onExit = async (eve)=>{
+            if (close) return;
             eve.preventDefault();
+            close = true;
             this.tra = false;
             this.removeEventListener('pointerup', onExit);
             this.removeEventListener('pointermove', onMove);
-            this.requestUpdate();
+            requestAnimationFrame(()=>{
+                this.whenTranslate();
+            });
         };
         onMove(eve);
         globalThis.addEventListener('lostpointercapture', onExit);

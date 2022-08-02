@@ -33,8 +33,16 @@ export function InspectAppViews() {
       width: min(75%, calc(100% - 1.25rem * 2));
 
       gap: 0.625rem;
-      margin: 0rem auto 1.25rem auto;
-      padding: 0rem 0rem ;
+      margin: 0rem auto 0rem auto;
+      padding: 0rem 0rem 1.25rem 0rem;
+
+      overflow-y: hidden;
+      overflow-x: auto;
+      overflow-x: overlay;
+    }
+
+    .node.app-views-navigation::-webkit-scrollbar {
+      display: none;
     }
 
     /*  */
@@ -51,7 +59,8 @@ export function InspectAppViews() {
 
       margin: 0rem 0rem;
       padding: 0rem 0.625rem;
-
+      
+      -webkit-tap-highlight-color: transparent;
       cursor: pointer;
     }
 
@@ -60,16 +69,22 @@ export function InspectAppViews() {
 
       font-family: 'BreezeSans', 'Breeze Sans', 'ui-sans-serif', 'system-ui';
       font-size: 1rem;
+      line-height: 1.25rem;
 
       letter-spacing: 0.012ch;
       font-weight: 500;
-      color: #252525;
+      color: #3a3a3a;
+
+      border-top: 2.5px solid transparent;
+      border-bottom: 2.5px solid currentColor;
     }
 
     .views-navigation-item:not([node-active]) > span {
       letter-spacing: 0.026ch;
       font-weight: 400;
-      color: #858585;
+      color: #909090;
+
+      border-color: transparent;
     }
   `;
 }
