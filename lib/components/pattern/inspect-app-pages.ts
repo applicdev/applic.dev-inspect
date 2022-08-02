@@ -20,15 +20,21 @@ export function InspectAppPages() {
       overflow: hidden;
     }
 
+    .node.app-pages > .pages-inner:not(:first-child) {
+      margin-left: -0.625rem;
+    }
+
+    .node.app-pages > .pages-inner:not(:last-child) {
+      margin-right: -0.625rem;
+    }
+
+    /*  */
     .pages-inner-resize {
       z-index: 20;
       position: relative;
 
-      --rw: 0.25rem;
-      --rw-hal: calc(var(--rw) / 2);
-
-      width: var(--rw);
-      margin: -50vh calc(-0.625rem - var(--rw-hal)) -50vh calc(-0.625rem - var(--rw-hal));
+      width: 0.25rem;
+      margin: -50vh -0.125rem;
 
       cursor: w-resize;
       touch-action: none;

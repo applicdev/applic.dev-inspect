@@ -635,15 +635,21 @@ function InspectAppPages() {
       overflow: hidden;
     }
 
+    .node.app-pages > .pages-inner:not(:first-child) {
+      margin-left: -0.625rem;
+    }
+
+    .node.app-pages > .pages-inner:not(:last-child) {
+      margin-right: -0.625rem;
+    }
+
+    /*  */
     .pages-inner-resize {
       z-index: 20;
       position: relative;
 
-      --rw: 0.25rem;
-      --rw-hal: calc(var(--rw) / 2);
-
-      width: var(--rw);
-      margin: -50vh calc(-0.625rem - var(--rw-hal)) -50vh calc(-0.625rem - var(--rw-hal));
+      width: 0.25rem;
+      margin: -50vh -0.125rem;
 
       cursor: w-resize;
       touch-action: none;
@@ -726,7 +732,7 @@ function InspectAppViews() {
 
       gap: 0.625rem;
       margin: 0rem auto 1.25rem auto;
-      padding: 0rem 0rem ;
+      padding: 0rem 0rem;
     }
 
     /*  */
@@ -752,16 +758,22 @@ function InspectAppViews() {
 
       font-family: 'BreezeSans', 'Breeze Sans', 'ui-sans-serif', 'system-ui';
       font-size: 1rem;
+      line-height: 1.25rem;
 
       letter-spacing: 0.012ch;
       font-weight: 500;
-      color: #252525;
+      color: #3a3a3a;
+
+      border-top: 2.5px solid transparent;
+      border-bottom: 2.5px solid currentColor;
     }
 
     .views-navigation-item:not([node-active]) > span {
       letter-spacing: 0.026ch;
       font-weight: 400;
-      color: #858585;
+      color: #909090;
+
+      border-color: transparent;
     }
   `;
 }
@@ -1029,12 +1041,21 @@ let InspectApp = class InspectApp extends s3 {
     }
     requestMove(eve) {
         eve.preventDefault();
-        this.tra = true;
-        this.requestUpdate();
         let start;
         let delta;
+        let close;
+        const onStart = (eve)=>{
+            if (close) return;
+            const wid = this.parentNode.offsetWidth;
+            start = {
+                x: eve.pageX
+            };
+            delta = wid * this.frame.rat - start.x;
+            this.requestUpdate();
+        };
         const onMove = (eve)=>{
-            if (!this.tra) return;
+            if (close) return;
+            this.tra = true;
             eve.preventDefault();
             const wid = this.parentNode.offsetWidth;
             if (!start) start = {
@@ -1048,14 +1069,17 @@ let InspectApp = class InspectApp extends s3 {
             this.frame.rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
             this.requestUpdate();
         };
-        const onExit = (eve)=>{
+        const onExit = async (eve)=>{
             eve.preventDefault();
+            close = true;
             this.tra = false;
             this.removeEventListener('pointerup', onExit);
             this.removeEventListener('pointermove', onMove);
-            this.requestUpdate();
+            requestAnimationFrame(()=>{
+                this.requestUpdate();
+            });
         };
-        onMove(eve);
+        onStart(eve);
         globalThis.addEventListener('lostpointercapture', onExit);
         globalThis.addEventListener('pointerup', onExit);
         globalThis.addEventListener('pointermove', onMove);

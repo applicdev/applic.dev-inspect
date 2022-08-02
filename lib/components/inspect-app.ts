@@ -151,14 +151,25 @@ class InspectApp extends LitElement {
   requestMove(eve) {
     eve.preventDefault();
 
-    this.tra = true;
-    this.requestUpdate();
-
     let start;
     let delta;
+    let close;
 
+    const onStart = (eve) => {
+      if (close) return;
+
+      const wid = this.parentNode.offsetWidth;
+
+      start = { x: eve.pageX };
+      delta = wid * this.frame.rat - start.x;
+
+      this.requestUpdate();
+    };
+    
     const onMove = (eve) => {
-      if (!this.tra) return;
+      if (close) return;
+
+      this.tra = true;
       eve.preventDefault();
 
       const wid = this.parentNode.offsetWidth;
@@ -168,22 +179,27 @@ class InspectApp extends LitElement {
       const pos = { x: eve.pageX - start.x };
       const ros = start.x + pos.x;
 
-      if (!delta) delta = wid * this.frame.rat - start.x
+      if (!delta) delta = wid * this.frame.rat - start.x;
 
       this.frame.rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
       this.requestUpdate();
     };
 
-    const onExit = (eve) => {
+    const onExit = async (eve) => {
       eve.preventDefault();
+
+      close = true;
       this.tra = false;
 
       this.removeEventListener('pointerup', onExit);
       this.removeEventListener('pointermove', onMove);
-      this.requestUpdate();
+
+      requestAnimationFrame(() => {
+        this.requestUpdate();
+      });
     };
 
-    onMove(eve);
+    onStart(eve);
 
     globalThis.addEventListener('lostpointercapture', onExit);
     globalThis.addEventListener('pointerup', onExit);
