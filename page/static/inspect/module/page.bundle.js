@@ -1065,7 +1065,6 @@ let InspectApp = class InspectApp extends s3 {
         this.whenTranslate();
         const onMove = (eve)=>{
             if (close) return;
-            this.tra = true;
             eve.preventDefault();
             const wid = this.parentNode.offsetWidth;
             if (!start) start = {
@@ -1076,7 +1075,10 @@ let InspectApp = class InspectApp extends s3 {
             };
             const ros = start.x + pos.x;
             if (!delta) delta = wid * this.frame.rat - start.x;
-            this.frame.rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
+            const rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
+            if (!this.tra && Math.abs(wid * rat - wid * this.frame.rat) <= 1) return;
+            this.tra = true;
+            this.frame.rat = rat;
             this.whenTranslate();
         };
         const onExit = async (eve)=>{

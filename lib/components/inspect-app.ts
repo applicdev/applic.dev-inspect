@@ -174,7 +174,6 @@ class InspectApp extends LitElement {
     const onMove = (eve) => {
       if (close) return;
 
-      this.tra = true;
       eve.preventDefault();
 
       const wid = this.parentNode.offsetWidth;
@@ -186,7 +185,13 @@ class InspectApp extends LitElement {
 
       if (!delta) delta = wid * this.frame.rat - start.x;
 
-      this.frame.rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
+      const rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
+
+      // ? hast to move by more than one pixel;
+      if (!this.tra && Math.abs(wid * rat - wid * this.frame.rat) <= 1) return;
+
+      this.tra = true;
+      this.frame.rat = rat;
       this.whenTranslate();
     };
 
