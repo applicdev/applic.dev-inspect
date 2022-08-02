@@ -211,6 +211,8 @@ class InspectApp extends LitElement {
       });
     };
 
+    onMove(eve);
+
     globalThis.addEventListener('lostpointercapture', onExit);
     globalThis.addEventListener('pointerup', onExit);
     globalThis.addEventListener('pointermove', onMove);

@@ -1092,6 +1092,7 @@ let InspectApp = class InspectApp extends s3 {
                 this.whenTranslate();
             });
         };
+        onMove(eve);
         globalThis.addEventListener('lostpointercapture', onExit);
         globalThis.addEventListener('pointerup', onExit);
         globalThis.addEventListener('pointermove', onMove);
