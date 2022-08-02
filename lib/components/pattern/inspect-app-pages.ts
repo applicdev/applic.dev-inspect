@@ -48,7 +48,7 @@ export function InspectAppPages() {
       content: '';
 
       position: absolute;
-      inset: 0rem calc(var(--rw) - 0.5rem);
+      inset: 0rem calc(0.25rem - 0.5rem);
     }
     .pages-inner-resize[node-active]::after {
       cursor: w-resize;

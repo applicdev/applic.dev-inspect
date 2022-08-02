@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
+import * as Actions from './actions/mod.ts';
 import * as Pattern from './pattern/mod.ts';
 import * as Segment from './segment/mod.ts';
 
@@ -151,21 +152,25 @@ class InspectApp extends LitElement {
   requestMove(eve) {
     eve.preventDefault();
 
-    let start;
-    let delta;
+    // ?
+    if (globalThis.performance.now() - this.frame.ratLas <= 250) {
+      this.frame.rat = 1 / 2.5;
+      this.whenTranslate();
+
+      return;
+    }
+
+    this.frame.ratLas = globalThis.performance.now();
+
+    // ?
     let close;
+    const wid = this.parentNode.offsetWidth;
 
-    const onStart = (eve) => {
-      if (close) return;
+    const start = { x: eve.pageX };
+    const delta = wid * this.frame.rat - start.x;
 
-      const wid = this.parentNode.offsetWidth;
+    this.whenTranslate();
 
-      start = { x: eve.pageX };
-      delta = wid * this.frame.rat - start.x;
-
-      this.requestUpdate();
-    };
-    
     const onMove = (eve) => {
       if (close) return;
 
@@ -182,10 +187,12 @@ class InspectApp extends LitElement {
       if (!delta) delta = wid * this.frame.rat - start.x;
 
       this.frame.rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
-      this.requestUpdate();
+      this.whenTranslate();
     };
 
     const onExit = async (eve) => {
+      if (close) return;
+
       eve.preventDefault();
 
       close = true;
@@ -195,11 +202,9 @@ class InspectApp extends LitElement {
       this.removeEventListener('pointermove', onMove);
 
       requestAnimationFrame(() => {
-        this.requestUpdate();
+        this.whenTranslate();
       });
     };
-
-    onStart(eve);
 
     globalThis.addEventListener('lostpointercapture', onExit);
     globalThis.addEventListener('pointerup', onExit);

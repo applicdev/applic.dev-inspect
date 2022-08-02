@@ -663,7 +663,7 @@ function InspectAppPages() {
       content: '';
 
       position: absolute;
-      inset: 0rem calc(var(--rw) - 0.5rem);
+      inset: 0rem calc(0.25rem - 0.5rem);
     }
     .pages-inner-resize[node-active]::after {
       cursor: w-resize;
@@ -731,8 +731,16 @@ function InspectAppViews() {
       width: min(75%, calc(100% - 1.25rem * 2));
 
       gap: 0.625rem;
-      margin: 0rem auto 1.25rem auto;
-      padding: 0rem 0rem;
+      margin: 0rem auto 0rem auto;
+      padding: 0rem 0rem 1.25rem 0rem;
+
+      overflow-y: hidden;
+      overflow-x: auto;
+      overflow-x: overlay;
+    }
+
+    .node.app-views-navigation::-webkit-scrollbar {
+      display: none;
     }
 
     /*  */
@@ -749,7 +757,8 @@ function InspectAppViews() {
 
       margin: 0rem 0rem;
       padding: 0rem 0.625rem;
-
+      
+      -webkit-tap-highlight-color: transparent;
       cursor: pointer;
     }
 
@@ -1041,18 +1050,19 @@ let InspectApp = class InspectApp extends s3 {
     }
     requestMove(eve) {
         eve.preventDefault();
-        let start;
-        let delta;
+        if (globalThis.performance.now() - this.frame.ratLas <= 250) {
+            this.frame.rat = 1 / 2.5;
+            this.whenTranslate();
+            return;
+        }
+        this.frame.ratLas = globalThis.performance.now();
         let close;
-        const onStart = (eve)=>{
-            if (close) return;
-            const wid = this.parentNode.offsetWidth;
-            start = {
-                x: eve.pageX
-            };
-            delta = wid * this.frame.rat - start.x;
-            this.requestUpdate();
+        const wid = this.parentNode.offsetWidth;
+        const start = {
+            x: eve.pageX
         };
+        const delta = wid * this.frame.rat - start.x;
+        this.whenTranslate();
         const onMove = (eve)=>{
             if (close) return;
             this.tra = true;
@@ -1067,19 +1077,19 @@ let InspectApp = class InspectApp extends s3 {
             const ros = start.x + pos.x;
             if (!delta) delta = wid * this.frame.rat - start.x;
             this.frame.rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
-            this.requestUpdate();
+            this.whenTranslate();
         };
         const onExit = async (eve)=>{
+            if (close) return;
             eve.preventDefault();
             close = true;
             this.tra = false;
             this.removeEventListener('pointerup', onExit);
             this.removeEventListener('pointermove', onMove);
             requestAnimationFrame(()=>{
-                this.requestUpdate();
+                this.whenTranslate();
             });
         };
-        onStart(eve);
         globalThis.addEventListener('lostpointercapture', onExit);
         globalThis.addEventListener('pointerup', onExit);
         globalThis.addEventListener('pointermove', onMove);

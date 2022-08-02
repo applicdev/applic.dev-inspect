@@ -33,8 +33,16 @@ export function InspectAppViews() {
       width: min(75%, calc(100% - 1.25rem * 2));
 
       gap: 0.625rem;
-      margin: 0rem auto 1.25rem auto;
-      padding: 0rem 0rem;
+      margin: 0rem auto 0rem auto;
+      padding: 0rem 0rem 1.25rem 0rem;
+
+      overflow-y: hidden;
+      overflow-x: auto;
+      overflow-x: overlay;
+    }
+
+    .node.app-views-navigation::-webkit-scrollbar {
+      display: none;
     }
 
     /*  */
@@ -51,7 +59,8 @@ export function InspectAppViews() {
 
       margin: 0rem 0rem;
       padding: 0rem 0.625rem;
-
+      
+      -webkit-tap-highlight-color: transparent;
       cursor: pointer;
     }
 
