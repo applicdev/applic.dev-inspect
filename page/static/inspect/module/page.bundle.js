@@ -634,15 +634,10 @@ function requestMove(eve) {
         if (close) return;
         eve.preventDefault();
         const wid = this.parentNode.offsetWidth;
-        if (!start) start = {
-            x: eve.pageX
-        };
         const pos = {
             x: eve.pageX - start.x
         };
-        const ros = start.x + pos.x;
-        if (!delta) delta = wid * this.frame.rat - start.x;
-        const rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
+        const rat = Math.max(0.1, Math.min(0.9, (start.x + pos.x + delta) / wid));
         if (!this.tra && Math.abs(wid * rat - wid * this.frame.rat) <= 1) return;
         this.tra = true;
         this.frame.rat = rat;
