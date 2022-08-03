@@ -637,7 +637,8 @@ function requestMove(eve) {
         const pos = {
             x: eve.pageX - start.x
         };
-        const rat = Math.max(0.1, Math.min(0.9, (start.x + pos.x + delta) / wid));
+        const val = Math.max(0.1, Math.min(0.9, (start.x + pos.x + delta) / wid));
+        const rat = Math.round(val * 100) / 100;
         if (!this.tra && Math.abs(wid * rat - wid * this.frame.rat) <= 1) return;
         this.tra = true;
         this.frame.rat = rat;
@@ -673,8 +674,8 @@ function InspectAppPages() {
       flex: 1;
       flex-direction: column;
 
-      min-width: var(--page-wid, unset);
-      max-width: var(--page-wid, unset);
+      min-width: calc(var(--page-wid, unset) + 0.625rem);
+      max-width: calc(var(--page-wid, unset) + 0.625rem);
 
       overflow: hidden;
     }
@@ -982,7 +983,7 @@ let InspectApp = class InspectApp extends s3 {
         return $`
       <div class="node app-pages">
         <!---->
-        <div class="pages-inner" style="--page-wid: calc(${this.prime.length >= 1 ? 100 * this.frame.rat : 100}% + 0.625rem);">
+        <div class="pages-inner" style="--page-wid: ${this.prime.length >= 1 ? 100 * this.frame.rat : 100}%;">
           <!----
           <div class="node app-tools">
             <div class="tools-focus"></div>

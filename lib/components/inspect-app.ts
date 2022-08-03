@@ -29,7 +29,7 @@ class InspectApp extends LitElement {
     return html`
       <div class="node app-pages">
         <!---->
-        <div class="pages-inner" style="--page-wid: calc(${this.prime.length >= 1 ? 100 * this.frame.rat : 100}% + 0.625rem);">
+        <div class="pages-inner" style="--page-wid: ${this.prime.length >= 1 ? 100 * this.frame.rat : 100}%;">
           <!----
           <div class="node app-tools">
             <div class="tools-focus"></div>
@@ -148,5 +148,4 @@ class InspectApp extends LitElement {
     ele.active = true;
     this.requestUpdate();
   }
-
 }

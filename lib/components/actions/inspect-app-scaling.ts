@@ -27,9 +27,10 @@ export function requestMove(eve) {
 
     const wid = this.parentNode.offsetWidth;
     const pos = { x: eve.pageX - start.x };
-    const rat = Math.max(0.1, Math.min(0.9, (start.x + pos.x + delta) / wid));
 
-    // ? hast to move by more than one pixel;
+    const val = Math.max(0.1, Math.min(0.9, (start.x + pos.x + delta) / wid));
+    const rat = Math.round(val * 100) / 100;
+
     if (!this.tra && Math.abs(wid * rat - wid * this.frame.rat) <= 1) return;
 
     this.tra = true;
