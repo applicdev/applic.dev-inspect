@@ -21,7 +21,6 @@ class InspectApp extends LitElement {
 
       ${Pattern.InspectAppPages()}
       ${Pattern.InspectAppViews()}
-      ${Pattern.InspectAppTools()}
     `,
   ];
 
@@ -29,7 +28,7 @@ class InspectApp extends LitElement {
     return html`
       <div class="node app-pages">
         <!---->
-        <div class="pages-inner" style="--page-wid: ${this.prime.length >= 1 ? 100 * this.frame.rat : 100}%;">
+        <div class="pages-inner" style="--page-wid: calc(${this.prime.length >= 1 ? `${100 * this.frame.rat}% + 0.625rem` : '100%'})">
           <!----
           <div class="node app-tools">
             <div class="tools-focus"></div>
@@ -69,12 +68,6 @@ class InspectApp extends LitElement {
               <div class="pages-inner-resize" @pointerdown="${Actions.requestMove.bind(this)}" ?node-active="${this.tra}"></div>
 
               <div class="pages-inner">
-                <!---->
-                <div class="node app-tools">
-                  <div class="tools-inner"></div>
-                </div>
-                <!---->
-
                 <!---->
                 <div class="node app-views">
                   <!---->
@@ -134,6 +127,7 @@ class InspectApp extends LitElement {
   }
 
   whenTranslate() {
+    this.frame.rat = Math.max(0.1, Math.min(0.9, this.frame.rat));
     this.frame.lay = this.parentNode.offsetWidth < 840 ? 0 : 1;
 
     this.requestUpdate();

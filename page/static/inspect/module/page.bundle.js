@@ -637,8 +637,7 @@ function requestMove(eve) {
         const pos = {
             x: eve.pageX - start.x
         };
-        const val = Math.max(0.1, Math.min(0.9, (start.x + pos.x + delta) / wid));
-        const rat = Math.round(val * 100) / 100;
+        const rat = Math.round((start.x + pos.x + delta) / wid * 1000) / 1000;
         if (!this.tra && Math.abs(wid * rat - wid * this.frame.rat) <= 1) return;
         this.tra = true;
         this.frame.rat = rat;
@@ -674,8 +673,8 @@ function InspectAppPages() {
       flex: 1;
       flex-direction: column;
 
-      min-width: calc(var(--page-wid, unset) + 0.625rem);
-      max-width: calc(var(--page-wid, unset) + 0.625rem);
+      min-width: var(--page-wid, unset);
+      max-width: var(--page-wid, unset);
 
       overflow: hidden;
     }
@@ -713,33 +712,6 @@ function InspectAppPages() {
     .pages-inner-resize[node-active]::after {
       cursor: w-resize;
       inset: 0rem -100vw;
-    }
-  `;
-}
-function InspectAppTools() {
-    return r`
-    /*  */
-    .node.app-tools {
-      display: flex;
-      flex: none;
-      flex-direction: row;
-
-      height: 3rem;
-      background: #f6f6f6;
-    }
-
-    .node.app-tools > .tools-focus {
-      display: flex;
-      flex: none;
-      flex-direction: row;
-
-      height: 3rem;
-      width: 3rem;
-
-      background: #f6f6f6;
-    }
-
-    .node.app-tools > .tools-inner {
     }
   `;
 }
@@ -976,14 +948,13 @@ let InspectApp = class InspectApp extends s3 {
 
       ${InspectAppPages()}
       ${InspectAppViews()}
-      ${InspectAppTools()}
     `, 
     ];
     render() {
         return $`
       <div class="node app-pages">
         <!---->
-        <div class="pages-inner" style="--page-wid: ${this.prime.length >= 1 ? 100 * this.frame.rat : 100}%;">
+        <div class="pages-inner" style="--page-wid: calc(${this.prime.length >= 1 ? `${100 * this.frame.rat}% + 0.625rem` : '100%'})">
           <!----
           <div class="node app-tools">
             <div class="tools-focus"></div>
@@ -1018,12 +989,6 @@ let InspectApp = class InspectApp extends s3 {
               <div class="pages-inner-resize" @pointerdown="${requestMove.bind(this)}" ?node-active="${this.tra}"></div>
 
               <div class="pages-inner">
-                <!---->
-                <div class="node app-tools">
-                  <div class="tools-inner"></div>
-                </div>
-                <!---->
-
                 <!---->
                 <div class="node app-views">
                   <!---->
@@ -1082,6 +1047,7 @@ let InspectApp = class InspectApp extends s3 {
         }
     }
     whenTranslate() {
+        this.frame.rat = Math.max(0.1, Math.min(0.9, this.frame.rat));
         this.frame.lay = this.parentNode.offsetWidth < 840 ? 0 : 1;
         this.requestUpdate();
         requestAnimationFrame(()=>this.requestUpdate());

@@ -14,8 +14,8 @@ export function InspectAppPages() {
       flex: 1;
       flex-direction: column;
 
-      min-width: calc(var(--page-wid, unset) + 0.625rem);
-      max-width: calc(var(--page-wid, unset) + 0.625rem);
+      min-width: var(--page-wid, unset);
+      max-width: var(--page-wid, unset);
 
       overflow: hidden;
     }
