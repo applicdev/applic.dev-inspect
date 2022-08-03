@@ -615,6 +615,55 @@ let PageBounds = class PageBounds extends s3 {
 PageBounds = __decorate([
     n4('page-bounds')
 ], PageBounds);
+function requestMove(eve) {
+    eve.preventDefault();
+    if (globalThis.performance.now() - this.frame.ratLas <= 250) {
+        this.frame.rat = 1 / 2.5;
+        this.whenTranslate();
+        return;
+    }
+    this.frame.ratLas = globalThis.performance.now();
+    let close;
+    const wid = this.parentNode.offsetWidth;
+    const start = {
+        x: eve.pageX
+    };
+    const delta = wid * this.frame.rat - start.x;
+    this.whenTranslate();
+    const onMove = (eve)=>{
+        if (close) return;
+        eve.preventDefault();
+        const wid = this.parentNode.offsetWidth;
+        if (!start) start = {
+            x: eve.pageX
+        };
+        const pos = {
+            x: eve.pageX - start.x
+        };
+        const ros = start.x + pos.x;
+        if (!delta) delta = wid * this.frame.rat - start.x;
+        const rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
+        if (!this.tra && Math.abs(wid * rat - wid * this.frame.rat) <= 1) return;
+        this.tra = true;
+        this.frame.rat = rat;
+        this.whenTranslate();
+    };
+    const onExit = async (eve)=>{
+        if (close) return;
+        eve.preventDefault();
+        close = true;
+        this.tra = false;
+        this.removeEventListener('pointerup', onExit);
+        this.removeEventListener('pointermove', onMove);
+        requestAnimationFrame(()=>{
+            this.whenTranslate();
+        });
+    };
+    onMove(eve);
+    globalThis.addEventListener('lostpointercapture', onExit);
+    globalThis.addEventListener('pointerup', onExit);
+    globalThis.addEventListener('pointermove', onMove);
+}
 function InspectAppPages() {
     return r`
     /*  */
@@ -938,13 +987,13 @@ let InspectApp = class InspectApp extends s3 {
         return $`
       <div class="node app-pages">
         <!---->
-        <div class="pages-inner" style="--page-wid: ${this.prime.length >= 1 ? 100 * this.frame.rat : 100}%">
-          <!---->
+        <div class="pages-inner" style="--page-wid: calc(${this.prime.length >= 1 ? 100 * this.frame.rat : 100}% + 0.625rem);">
+          <!----
           <div class="node app-tools">
             <div class="tools-focus"></div>
             <div class="tools-inner"></div>
           </div>
-          <!---->
+          !---->
 
           <!---->
           <div class="node app-views">
@@ -970,7 +1019,7 @@ let InspectApp = class InspectApp extends s3 {
 
         <!---->
         ${this.prime.length >= 1 ? $`
-              <div class="pages-inner-resize" @pointerdown="${this.requestMove.bind(this)}" ?node-active="${this.tra}"></div>
+              <div class="pages-inner-resize" @pointerdown="${requestMove.bind(this)}" ?node-active="${this.tra}"></div>
 
               <div class="pages-inner">
                 <!---->
@@ -1047,55 +1096,6 @@ let InspectApp = class InspectApp extends s3 {
         });
         ele.active = true;
         this.requestUpdate();
-    }
-    requestMove(eve) {
-        eve.preventDefault();
-        if (globalThis.performance.now() - this.frame.ratLas <= 250) {
-            this.frame.rat = 1 / 2.5;
-            this.whenTranslate();
-            return;
-        }
-        this.frame.ratLas = globalThis.performance.now();
-        let close;
-        const wid = this.parentNode.offsetWidth;
-        const start = {
-            x: eve.pageX
-        };
-        const delta = wid * this.frame.rat - start.x;
-        this.whenTranslate();
-        const onMove = (eve)=>{
-            if (close) return;
-            eve.preventDefault();
-            const wid = this.parentNode.offsetWidth;
-            if (!start) start = {
-                x: eve.pageX
-            };
-            const pos = {
-                x: eve.pageX - start.x
-            };
-            const ros = start.x + pos.x;
-            if (!delta) delta = wid * this.frame.rat - start.x;
-            const rat = Math.max(0.1, Math.min(0.9, (ros + delta) / wid));
-            if (!this.tra && Math.abs(wid * rat - wid * this.frame.rat) <= 1) return;
-            this.tra = true;
-            this.frame.rat = rat;
-            this.whenTranslate();
-        };
-        const onExit = async (eve)=>{
-            if (close) return;
-            eve.preventDefault();
-            close = true;
-            this.tra = false;
-            this.removeEventListener('pointerup', onExit);
-            this.removeEventListener('pointermove', onMove);
-            requestAnimationFrame(()=>{
-                this.whenTranslate();
-            });
-        };
-        onMove(eve);
-        globalThis.addEventListener('lostpointercapture', onExit);
-        globalThis.addEventListener('pointerup', onExit);
-        globalThis.addEventListener('pointermove', onMove);
     }
 };
 InspectApp = __decorate5([
