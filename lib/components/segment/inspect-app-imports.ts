@@ -24,12 +24,14 @@ export class InspectAppImports extends LitElement {
   ];
 
   render() {
-    // return html` <div class="node c"></div> `;
     return html`
-      <button @click="${this.storageInc.bind(this)}">inc</button>
-      <button @click="${this.storageDec.bind(this)}">dec</button>
-      <br />
-      <h2>Counter: ${this.storage['debug-counter'].val}</h2>
+      <div class="">
+        <button @click="${this.storageInc.bind(this)}">+</button>
+        <button @click="${this.storageDec.bind(this)}">-</button>
+        <br />
+        <h2>Counter: ${this.storage['debug:counter'].val}</h2>
+      </div>
+      <div class="node c"></div>
     `;
   }
 

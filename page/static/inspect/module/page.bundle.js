@@ -706,13 +706,21 @@ function i2(n, f, u) {
         replaceReducer: d
     })[t2] = E, c;
 }
-const storageDefault = {
-    version: 0,
-    'debug-counter': {
-        val: 0
+const initial = {
+    shortlived: {
+        version: 0
+    },
+    persistent: {
+        'debug:counter': {
+            val: 0
+        }
     }
 };
-const storage = i2((state = storageDefault, { type  }, value)=>{
+const storage = i2((state, { type  }, value)=>{
+    if (!state) state = {
+        ...initial.shortlived,
+        ...initial.persistent
+    };
     switch(type){
         case 'storage:sync':
             state = {
@@ -721,10 +729,10 @@ const storage = i2((state = storageDefault, { type  }, value)=>{
             };
             break;
         case 'counter:inc':
-            state['debug-counter'].val += 1;
+            state['debug:counter'].val += 1;
             break;
         case 'counter:dec':
-            state['debug-counter'].val -= 1;
+            state['debug:counter'].val -= 1;
             break;
     }
     return state;
@@ -740,29 +748,31 @@ function storageChanged({ force  }) {
             }
         }
     }
-    if (storageDefault.version != sta.version) return;
     storage.dispatch({
         type: 'storage:sync'
     }, sta);
     for(const k1 in cur){
         if (Object.prototype.hasOwnProperty.call(cur, k1)) {
-            if (k1 in sta) continue;
+            if (k1 in initial.shortlived || k1 in initial.persistent) continue;
             localStorage.removeItem(k1);
         }
     }
 }
-globalThis.addEventListener('storage', storageChanged.bind(null, {
-    force: false
-}));
+if (initial.shortlived.version != storage.getState().version) {
+    globalThis.localStorage.clear();
+    globalThis.localStorage.setItem('version', initial.shortlived.version);
+}
 storageChanged({
     force: true
 });
+globalThis.addEventListener('storage', storageChanged);
 storage.subscribe(()=>{
     const cur = globalThis.localStorage;
     const sta = storage.getState();
     for(const k in sta){
+        if (k in initial.shortlived) continue;
         const pla = JSON.stringify(sta[k]);
-        const val = cur.getItem(k) || 'null';
+        const val = cur.getItem(k);
         if (val != pla) {
             globalThis.localStorage.setItem(k, pla);
         }
@@ -1017,10 +1027,13 @@ let InspectAppImports = class InspectAppImports extends s3 {
     ];
     render() {
         return $`
-      <button @click="${this.storageInc.bind(this)}">inc</button>
-      <button @click="${this.storageDec.bind(this)}">dec</button>
-      <br />
-      <h2>Counter: ${this.storage['debug-counter'].val}</h2>
+      <div class="">
+        <button @click="${this.storageInc.bind(this)}">+</button>
+        <button @click="${this.storageDec.bind(this)}">-</button>
+        <br />
+        <h2>Counter: ${this.storage['debug:counter'].val}</h2>
+      </div>
+      <div class="node c"></div>
     `;
     }
     storageInc() {

@@ -1,11 +1,17 @@
 import { createStore } from 'redux';
 
-const storageDefault = {
-  version: 0,
-  'debug-counter': { val: 0 },
+const initial = {
+  shortlived: {
+    version: 0,
+  },
+  persistent: {
+    'debug:counter': { val: 0 }
+  }
 };
 
-export const storage = createStore((state = storageDefault, { type }, value) => {
+export const storage = createStore((state, { type }, value) => {
+  if (!state) state = { ...initial.shortlived, ...initial.persistent };
+
   switch (type) {
     // ?
     case 'storage:sync':
@@ -14,10 +20,10 @@ export const storage = createStore((state = storageDefault, { type }, value) => 
 
     // ?
     case 'counter:inc':
-      state['debug-counter'].val += 1;
+      state['debug:counter'].val += 1;
       break;
     case 'counter:dec':
-      state['debug-counter'].val -= 1;
+      state['debug:counter'].val -= 1;
       break;
   }
 
@@ -32,28 +38,33 @@ function storageChanged({ force }) {
   for (const k in cur) {
     if (Object.prototype.hasOwnProperty.call(cur, k)) {
       if (!force && cur.getItem(k) == JSON.stringify(sta[k])) continue;
+      
       if (k in sta) {
         sta[k] = JSON.parse(cur.getItem(k));
       }
     }
   }
 
-  // ? skip; when wrong version
-  if (storageDefault.version != sta.version) return;
-
   storage.dispatch({ type: 'storage:sync' }, sta);
 
   // ? remove stale values
   for (const k in cur) {
     if (Object.prototype.hasOwnProperty.call(cur, k)) {
-      if (k in sta) continue;
+      if (k in initial.shortlived || k in initial.persistent) continue;
       localStorage.removeItem(k);
     }
   }
 }
 
-globalThis.addEventListener('storage', storageChanged.bind(null, { force: false }));
+
+// ? clear; when version changed
+if (initial.shortlived.version != storage.getState().version) {
+  globalThis.localStorage.clear();
+  globalThis.localStorage.setItem('version', initial.shortlived.version);
+};
+
 storageChanged({ force: true });
+globalThis.addEventListener('storage', storageChanged);
 
 storage.subscribe(() => {
   const cur = globalThis.localStorage;
@@ -61,8 +72,10 @@ storage.subscribe(() => {
 
   // ? set values
   for (const k in sta) {
+    if (k in initial.shortlived) continue;
+
     const pla = JSON.stringify(sta[k]);
-    const val = cur.getItem(k) || 'null';
+    const val = cur.getItem(k);
 
     if (val != pla) {
       globalThis.localStorage.setItem(k, pla);
