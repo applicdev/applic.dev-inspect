@@ -615,6 +615,159 @@ let PageBounds = class PageBounds extends s3 {
 PageBounds = __decorate([
     n4('page-bounds')
 ], PageBounds);
+function r3(r) {
+    return "Minified Redux error #" + r + "; visit https://redux.js.org/Errors?code=" + r + " for the full message or use the non-minified dev environment for full errors. ";
+}
+var t2 = "function" == typeof Symbol && Symbol.observable || "@@observable", n6 = function() {
+    return Math.random().toString(36).substring(7).split("").join(".");
+}, e3 = {
+    INIT: "@@redux/INIT" + n6(),
+    REPLACE: "@@redux/REPLACE" + n6(),
+    PROBE_UNKNOWN_ACTION: function() {
+        return "@@redux/PROBE_UNKNOWN_ACTION" + n6();
+    }
+};
+function o4(r) {
+    if ("object" != typeof r || null === r) return !1;
+    for(var t = r; null !== Object.getPrototypeOf(t);)t = Object.getPrototypeOf(t);
+    return Object.getPrototypeOf(r) === t;
+}
+function i2(n, f, u) {
+    var c;
+    if ("function" == typeof f && "function" == typeof u || "function" == typeof u && "function" == typeof arguments[3]) throw Error(r3(0));
+    if ("function" == typeof f && void 0 === u && (u = f, f = void 0), void 0 !== u) {
+        if ("function" != typeof u) throw Error(r3(1));
+        return u(i2)(n, f);
+    }
+    if ("function" != typeof n) throw Error(r3(2));
+    var p = n, a = f, y = [], l = y, s = !1;
+    function v() {
+        l === y && (l = y.slice());
+    }
+    function h() {
+        if (s) throw Error(r3(3));
+        return a;
+    }
+    function b(t) {
+        if ("function" != typeof t) throw Error(r3(4));
+        if (s) throw Error(r3(5));
+        var n = !0;
+        return v(), l.push(t), function() {
+            if (n) {
+                if (s) throw Error(r3(6));
+                n = !1, v();
+                var e = l.indexOf(t);
+                l.splice(e, 1), y = null;
+            }
+        };
+    }
+    function O(t) {
+        if (!o4(t)) throw Error(r3(7));
+        if (void 0 === t.type) throw Error(r3(8));
+        if (s) throw Error(r3(9));
+        try {
+            s = !0, a = p(a, t);
+        } finally{
+            s = !1;
+        }
+        for(var n = y = l, e = 0; n.length > e; e++){
+            (0, n[e])();
+        }
+        return t;
+    }
+    function d(t) {
+        if ("function" != typeof t) throw Error(r3(10));
+        p = t, O({
+            type: e3.REPLACE
+        });
+    }
+    function E() {
+        var n, e = b;
+        return (n = {
+            subscribe: function(t) {
+                if ("object" != typeof t || null === t) throw Error(r3(11));
+                function n() {
+                    t.next && t.next(h());
+                }
+                return n(), {
+                    unsubscribe: e(n)
+                };
+            }
+        })[t2] = function() {
+            return this;
+        }, n;
+    }
+    return O({
+        type: e3.INIT
+    }), (c = {
+        dispatch: O,
+        subscribe: b,
+        getState: h,
+        replaceReducer: d
+    })[t2] = E, c;
+}
+const storageDefault = {
+    version: 0,
+    'debug-counter': {
+        val: 0
+    }
+};
+const storage = i2((state = storageDefault, { type  }, value)=>{
+    switch(type){
+        case 'storage:sync':
+            state = {
+                ...state,
+                ...value
+            };
+            break;
+        case 'counter:inc':
+            state['debug-counter'].val += 1;
+            break;
+        case 'counter:dec':
+            state['debug-counter'].val -= 1;
+            break;
+    }
+    return state;
+});
+function storageChanged({ force  }) {
+    const cur = globalThis.localStorage;
+    const sta = storage.getState();
+    for(const k in cur){
+        if (Object.prototype.hasOwnProperty.call(cur, k)) {
+            if (!force && cur.getItem(k) == JSON.stringify(sta[k])) continue;
+            if (k in sta) {
+                sta[k] = JSON.parse(cur.getItem(k));
+            }
+        }
+    }
+    if (storageDefault.version != sta.version) return;
+    storage.dispatch({
+        type: 'storage:sync'
+    }, sta);
+    for(const k1 in cur){
+        if (Object.prototype.hasOwnProperty.call(cur, k1)) {
+            if (k1 in sta) continue;
+            localStorage.removeItem(k1);
+        }
+    }
+}
+globalThis.addEventListener('storage', storageChanged.bind(null, {
+    force: false
+}));
+storageChanged({
+    force: true
+});
+storage.subscribe(()=>{
+    const cur = globalThis.localStorage;
+    const sta = storage.getState();
+    for(const k in sta){
+        const pla = JSON.stringify(sta[k]);
+        const val = cur.getItem(k) || 'null';
+        if (val != pla) {
+            globalThis.localStorage.setItem(k, pla);
+        }
+    }
+});
 function requestMove(eve) {
     eve.preventDefault();
     if (globalThis.performance.now() - this.frame.ratLas <= 250) {
@@ -697,10 +850,14 @@ function InspectAppPages() {
 
       cursor: w-resize;
       touch-action: none;
-    }
+      background: transparent;
 
+      transition: background 20ms 0ms;
+    }
+    
     .pages-inner-resize[node-active] {
       background: #858585;
+      transition: background 20ms 50ms;
     }
 
     .pages-inner-resize::after {
@@ -847,19 +1004,44 @@ let InspectAppImports = class InspectAppImports extends s3 {
         display: flex;
         flex: 1;
         flex-direction: column;
+
+        padding: 1.25rem;
       }
 
       .node.c {
         display: flex;
         flex: 1;
-
-        margin: 1.25rem;
         background: #dce3ff;
       }
     `, 
     ];
     render() {
-        return $` <div class="node c"></div> `;
+        return $`
+      <button @click="${this.storageInc.bind(this)}">inc</button>
+      <button @click="${this.storageDec.bind(this)}">dec</button>
+      <br />
+      <h2>Counter: ${this.storage['debug-counter'].val}</h2>
+    `;
+    }
+    storageInc() {
+        storage.dispatch({
+            type: 'counter:inc'
+        }, {});
+    }
+    storageDec() {
+        storage.dispatch({
+            type: 'counter:dec'
+        }, {});
+    }
+    constructor(){
+        super();
+        this.storage = storage.getState();
+    }
+    firstUpdated() {
+        storage.subscribe(()=>{
+            this.storage = storage.getState();
+            this.requestUpdate();
+        });
     }
 };
 InspectAppImports = __decorate2([

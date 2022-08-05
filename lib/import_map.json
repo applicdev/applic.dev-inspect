@@ -1,13 +1,15 @@
 {
   "imports": {
-    "lit": "https://unpkg.com/lit",
-    "lit/": "https://unpkg.com/lit/",
+    "redux": "https://unpkg.com/redux@latest/es/redux.mjs",
 
-    "lit-html": "https://unpkg.com/lit-html",
-    "lit-html/": "https://unpkg.com/lit-html/",
+    "lit": "https://unpkg.com/lit@latest",
+    "lit/": "https://unpkg.com/lit@latest/",
 
-    "lit-element": "https://unpkg.com/lit-element",
-    "lit-element/": "https://unpkg.com/lit-element/",
+    "lit-html": "https://unpkg.com/lit-html@latest",
+    "lit-html/": "https://unpkg.com/lit-html@latest/",
+
+    "lit-element": "https://unpkg.com/lit-element@latest",
+    "lit-element/": "https://unpkg.com/lit-element@latest/",
 
     "@lit/reactive-element": "https://unpkg.com/@lit/reactive-element",
     "@lit/reactive-element/": "https://unpkg.com/@lit/reactive-element/"

@@ -38,10 +38,14 @@ export function InspectAppPages() {
 
       cursor: w-resize;
       touch-action: none;
-    }
+      background: transparent;
 
+      transition: background 20ms 0ms;
+    }
+    
     .pages-inner-resize[node-active] {
       background: #858585;
+      transition: background 20ms 50ms;
     }
 
     .pages-inner-resize::after {
