@@ -1,33 +1,20 @@
-const MODULE_OUT = './static/inspect';
-const MODULE_IMPORTMAP = './lib/import_map.json';
-const MODULE = [
-  { urn: './lib/inspect.ts', out: `${MODULE_OUT}/module/page.bundle.js` }, //
-];
+import { ensureDir } from 'https://deno.land/std/fs/mod.ts';
+import { dirname } from 'https://deno.land/std/path/mod.ts';
 
-let upt: Promise<void[]> | null = null;
+[
+  { urn: './lib/inline.ts', out: `./page/static/inspect/module/inline.bundle.js` }, //
+  { urn: './lib/loaded.ts', out: `./page/static/inspect/module/loaded.bundle.js` }, //
+].map(async (par) => {
+  const runer = await Deno.run({
+    cmd: ['deno', 'bundle', '--no-check', par.urn],
+    cwd: './',
+    stdout: 'piped',
+    // stderr: 'null'
+  });
 
-function updated() {
-  if (upt) return;
+  const out: Uint8Array = await runer.output();
+  const cur: Uint8Array = (await Deno.readFile(par.out).catch(() => {})) || new Uint8Array();
 
-  upt = Promise.all(
-    MODULE.map(async (par) => {
-      await new Promise((r) => setTimeout(r, 500));
-
-      const runer = await Deno.run({
-        cmd: ['deno', 'bundle', '--no-check', par.urn, `--importmap=${MODULE_IMPORTMAP}`],
-        cwd: '../', //
-        stdout: 'piped',
-        // stderr: 'null'
-      });
-
-      const out: Uint8Array = await runer.output();
-      const cur: Uint8Array = await Deno.readFile(par.out).catch(() => new Uint8Array());
-
-      if (out.toString() != cur.toString()) Deno.writeFile(par.out, out);
-      upt = null;
-    })
-  );
-}
-
-await updated();
-for await (const _ of Deno.watchFs('../lib/')) await updated();
+  ensureDir(dirname(par.out));
+  if (out.toString() != cur.toString()) Deno.writeFile(par.out, out);
+});

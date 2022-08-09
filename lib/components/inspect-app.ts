@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import * as Actions from './actions/mod.ts';
@@ -28,7 +28,9 @@ class InspectApp extends LitElement {
     return html`
       <div class="node app-pages">
         <!---->
-        <div class="pages-inner" style="--page-wid: calc(${this.prime.length >= 1 ? `${100 * this.frame.rat}% + 0.625rem` : '100%'})">
+        <div class="pages-inner" style="--page-wid: calc(${
+      this.prime.length >= 1 ? `${100 * this.frame.rat}% + 0.625rem` : '100%'
+    })">
           <!----
           <div class="node app-tools">
             <div class="tools-focus"></div>
@@ -39,45 +41,64 @@ class InspectApp extends LitElement {
           <!---->
           <div class="node app-views">
             <!---->
-            ${this.aside.map((ele) => html`<div class="app-views-plane" ?node-active="${ele.active}">${ele.node}</div> `)}
+            ${
+      this.aside.map((ele) =>
+        html`<div class="app-views-plane" ?node-active="${ele.active}">${ele.node}</div> `
+      )
+    }
             <!---->
           </div>
           <!---->
 
           <!---->
-          ${this.aside.length >= 2
-            ? html`
+          ${
+      this.aside.length >= 2
+        ? html`
                 <div class="node app-views-navigation">
-                  ${this.aside.map(
-                    (ele) => html`
-                      <button class="views-navigation-item" ?node-active="${ele.active}" @click="${this.requestView.bind(this, ele)}">
+                  ${
+          this.aside.map(
+            (ele) =>
+              html`
+                      <button class="views-navigation-item" ?node-active="${ele.active}" @click="${
+                this.requestView.bind(this, ele)
+              }">
                         <span>${ele.caption}</span>
                       </button>
-                    `
-                  )}
+                    `,
+          )
+        }
                 </div>
               `
-            : html``}
+        : html``
+    }
           <!---->
         </div>
         <!---->
 
         <!---->
-        ${this.prime.length >= 1
-          ? html`
-              <div class="pages-inner-resize" @pointerdown="${Actions.requestMove.bind(this)}" ?node-active="${this.tra}"></div>
+        ${
+      this.prime.length >= 1
+        ? html`
+              <div class="pages-inner-resize" @pointerdown="${
+          Actions.requestMove.bind(this)
+        }" ?node-active="${this.tra}"></div>
 
               <div class="pages-inner">
                 <!---->
                 <div class="node app-views">
                   <!---->
-                  ${this.prime.map((ele) => html`<div class="app-views-plane" ?node-active="${true}">${ele.node}</div> `)}
+                  ${
+          this.prime.map((ele) =>
+            html`<div class="app-views-plane" ?node-active="${true}">${ele.node}</div> `
+          )
+        }
                   <!---->
                 </div>
                 <!---->
               </div>
             `
-          : html``}
+        : html``
+    }
         <!---->
       </div>
     `;
@@ -89,7 +110,6 @@ class InspectApp extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    globalThis.document.title = `Inspect - Twitch Elements`;
 
     this.frame = {
       rat: 1 / 2.5,

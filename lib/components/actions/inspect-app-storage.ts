@@ -4,9 +4,12 @@ const initial = {
   shortlived: {
     version: 0,
   },
+
   persistent: {
-    'debug:counter': { val: 0 }
-  }
+    'debug:counter': { val: 0 },
+    scheme: { type: 0, role: 0 },
+    config: {},
+  },
 };
 
 export const storage = createStore((state, { type }, value) => {
@@ -19,6 +22,7 @@ export const storage = createStore((state, { type }, value) => {
       break;
 
     // ?
+
     case 'counter:inc':
       state['debug:counter'].val += 1;
       break;
@@ -38,14 +42,12 @@ function storageChanged({ force }) {
   for (const k in cur) {
     if (Object.prototype.hasOwnProperty.call(cur, k)) {
       if (!force && cur.getItem(k) == JSON.stringify(sta[k])) continue;
-      
+
       if (k in sta) {
         sta[k] = JSON.parse(cur.getItem(k));
       }
     }
   }
-
-  storage.dispatch({ type: 'storage:sync' }, sta);
 
   // ? remove stale values
   for (const k in cur) {
@@ -54,14 +56,15 @@ function storageChanged({ force }) {
       localStorage.removeItem(k);
     }
   }
-}
 
+  storage.dispatch({ type: 'storage:sync' }, sta);
+}
 
 // ? clear; when version changed
 if (initial.shortlived.version != storage.getState().version) {
   globalThis.localStorage.clear();
   globalThis.localStorage.setItem('version', initial.shortlived.version);
-};
+}
 
 storageChanged({ force: true });
 globalThis.addEventListener('storage', storageChanged);

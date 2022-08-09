@@ -1,7 +1,0 @@
-{
-  "tasks": {
-    "start": "deno run -A --watch=static/,routes/ dev.ts",
-    "production": "DENO_DEPLOYMENT_ID=\"$(git rev-parse HEAD)\" deno run -A main.ts"
-  },
-  "importMap": "./import_map.json"
-}

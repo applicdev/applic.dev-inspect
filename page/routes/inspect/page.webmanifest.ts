@@ -14,7 +14,12 @@ const DATA = {
   categories: ['games', 'education'],
   icons: [
     { src: '/inspect/assets/figure/512w/page.png', sizes: '512x512', type: 'image/png' },
-    { src: '/inspect/assets/figure/512w/page-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+    {
+      src: '/inspect/assets/figure/512w/page-maskable.png',
+      sizes: '512x512',
+      type: 'image/png',
+      purpose: 'maskable',
+    },
   ],
 
   orientation: 'any',

@@ -28,7 +28,6 @@ export function requestMove(eve) {
     const wid = this.parentNode.offsetWidth;
     const pos = { x: eve.pageX - start.x };
 
-   
     const rat = Math.round(((start.x + pos.x + delta) / wid) * 1000) / 1000;
 
     if (!this.tra && Math.abs(wid * rat - wid * this.frame.rat) <= 1) return;

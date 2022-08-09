@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { storage } from '../actions/mod.ts';
@@ -37,10 +37,10 @@ export class InspectAppImports extends LitElement {
 
   storageInc() {
     storage.dispatch({ type: 'counter:inc' }, {});
-  };
+  }
   storageDec() {
     storage.dispatch({ type: 'counter:dec' }, {});
-  };
+  }
 
   constructor() {
     super();
@@ -49,8 +49,8 @@ export class InspectAppImports extends LitElement {
 
   firstUpdated() {
     storage.subscribe(() => {
-       this.storage = storage.getState();
-       this.requestUpdate();
+      this.storage = storage.getState();
+      this.requestUpdate();
     });
   }
 }
