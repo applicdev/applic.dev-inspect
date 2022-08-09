@@ -1,5 +1,10 @@
 {
-  "deno.enablePaths": ["./page"],
+  "deno.enable": true,
   "deno.lint": true,
-  "deno.importMap": "./page/import_map.json",
+  "deno.importMap": "./.vscode/import_map.json",
+  "deno.config": "./deno.json",
+
+  "editor.rulers": [80, 100],
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "denoland.vscode-deno"
 }

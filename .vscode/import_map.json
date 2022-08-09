@@ -1,30 +1,28 @@
 {
   "imports": {
-    "#0": "-- Fresh --",
-
     "$fresh/": "https://deno.land/x/fresh@1.0.1/",
     "$semver/": "https://deno.land/x/semver@v1.4.0/",
 
-    "@twind": "../page/utils/twind.ts",
+    "@twind": "./utils/twind.ts",
     "twind": "https://esm.sh/twind@0.16.17",
     "twind/": "https://esm.sh/twind@0.16.17/",
 
     "preact": "https://esm.sh/preact@10.8.2",
     "preact/": "https://esm.sh/preact@10.8.2/",
-    "preact-render-to-string": "https://esm.sh/preact-render-to-string@5.2.0?external=preact",
+    "preact-render-to-string": "https://esm.sh/preact-render-to-string@5.2.0?deps=preact@10.8.2",
 
-    "#1": "-- Lit --",
+    "redux": "https://cdn.skypack.dev/redux/es/redux.mjs",
 
-    "lit": "https://unpkg.com/lit",
-    "lit/": "https://unpkg.com/lit/",
+    "lit": "https://cdn.skypack.dev/lit?dts",
+    "lit/": "https://cdn.skypack.dev/lit/",
 
-    "lit-html": "https://unpkg.com/lit-html",
-    "lit-html/": "https://unpkg.com/lit-html/",
+    "lit-html": "https://cdn.skypack.dev/lit-html",
+    "lit-html/": "https://cdn.skypack.dev/lit-html/",
 
-    "lit-element": "https://unpkg.com/lit-element",
-    "lit-element/": "https://unpkg.com/lit-element/",
+    "lit-element": "https://cdn.skypack.dev/lit-element",
+    "lit-element/": "https://cdn.skypack.dev/lit-element/",
 
-    "@lit/reactive-element": "https://unpkg.com/@lit/reactive-element",
-    "@lit/reactive-element/": "https://unpkg.com/@lit/reactive-element/"
+    "@lit/reactive-element": "https://cdn.skypack.dev/@lit/reactive-element",
+    "@lit/reactive-element/": "https://cdn.skypack.dev/@lit/reactive-element/"
   }
 }
