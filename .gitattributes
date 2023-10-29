@@ -1,9 +1,11 @@
 *	text=auto eol=lf 
 
+deploy/static/**/* -linguist-detectable
+
+*.js -linguist-detectable
 *.css -linguist-detectable
 *.html -linguist-detectable
 *.json -linguist-detectable
-*.js -linguist-detectable
 
 *.md -linguist-vendored
 *.md -linguist-generated

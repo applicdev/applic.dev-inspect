@@ -1,19 +1,17 @@
 {
-  "importMap": ".vscode/import_map.json",
+  "importMap": "./.vscode/import_map.json",
+  "tasks": {
+    "start": "deno run -A --unstable --watch=labs/,deploy/routes/,deploy/static/,deploy/main.ts deploy/dev.ts",
+    "lint": "deno fmt --ignore=deploy/static/ && deno lint --ignore=deploy/static/"
+  },
   "compilerOptions": {
     "allowJs": true,
     "lib": ["dom", "deno.worker"]
   },
   "fmt": {
     "options": {
-      "lineWidth": 100,
+      "lineWidth": 80,
       "singleQuote": true
     }
-  },
-  "tasks": {
-    "bundle": "deno run -A ./page/dev-bundle.ts",
-    "start": "deno run -A --watch=lib/,page/routes/ page/dev.ts",
-    "production": "DENO_DEPLOYMENT_ID=\"$(git rev-parse HEAD)\" deno run -A page/main.ts",
-    "lint": "deno fmt --ignore=./page/static && deno lint --ignore=./page/static"
   }
 }
