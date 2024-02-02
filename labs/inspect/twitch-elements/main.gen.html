@@ -4,17 +4,13 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no" />
   <meta name="robots" content="noindex, nofollow, noarchive, noai, notranslate">
 
   <!---->
   <title>Inspect / Twitch Elements (legacy)</title>
-  <meta content="Interactive viewer to test, compare and export graphics to platform standards, right in your browser." property="description" />
-  <!---->
-
-  <!---->
-  <link href="/inspect/assets/manifest/shortcut-icon-96.svg" rel="icon" />
-  <link href="/assets/manifest/icon-192.svg" rel="apple-touch-icon" />
+  <meta content="Interactive viewer to test, compare and export graphics to platform standards, right in your browser."
+    property="description" />
   <!---->
 
   <!---->
@@ -23,22 +19,13 @@
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#171b22" />
   <link href="/station.webmanifest" rel="manifest" />
   <!---->
-  
-  <!---->
-  <script src="/locals/main.gen.js?bundle=@no-bundle" type="module"></script>
-  <!---->
-  
+
   <!---->
   <!-- <link href="/assets/fonts/BreezeSans.css?bundle=@no-bundle" rel="stylesheet" /> -->
   <!-- <link href="/assets/fonts/FiraCode.css?bundle=@no-bundle" rel="stylesheet" /> -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet" />
   <!---->
 
-
-
-</head>
-
-<body role="application" unresolved="">
   <script>
     !(function (e) {
       var r = (e.babelHelpers = {});
@@ -1955,8 +1942,26 @@
       border: none !important;
     }
   </style>
+</head>
 
-
+<body unresolved="">
+  <!---->
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/page-sw.js", { scope: "/" })
+        .then((registration) => {
+          navigator.serviceWorker.getRegistrations().then((registrations) => {
+            for (let reg of registrations) {
+              if (registration != reg) reg.unregister();
+            }
+          })
+        })
+        .catch((error) => { console.error(`Registration failed with ${error}`); });
+    }
+  </script>
+  <script src="/inspect/twitch-elements/page-promotional.gen.js"></script>
+  <!---->
 
   <red-app></red-app>
 
@@ -20927,7 +20932,7 @@
           <red-scroll-area hidden$="[[!__media.narrow]]">
             <input-manager pixelated$="[[pixelated]]"></input-manager>
             <div slot="lower">
-              <input-settings style="margin-bottom: -46px; z-index: 3"></input-settings>
+              <input-settings style="margin-bottom: -38px; z-index: 3"></input-settings>
               <div id="appFooter">
                 <div style="display: inline-block; position: relative; margin-left: 36px; z-index: 3">
                   <sp-feedback style=""></sp-feedback>
